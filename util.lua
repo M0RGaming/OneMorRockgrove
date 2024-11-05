@@ -1,3 +1,5 @@
+local omr = OneMorRockgrove
+
 -- distance weighted mean, xbar = Σ_i(w_i * x_i)/Σ_i(w_i), where w_i = n/Σ_j(|x_i-x_j|), and n = int (usually number of points)
 function omr.distanceWeightedMean(positions)
 	local avgx = 0

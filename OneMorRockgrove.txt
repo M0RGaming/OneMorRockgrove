@@ -7,9 +7,12 @@
 ## SavedVariables: OMRSettings
 ## Author: |c0DC1CF@M0R_Gaming|r
 
-util.lua
 rockgrove.lua
+util.lua
+
 
 bosses/oax.lua
+bosses/bahsei.lua
 
 settings.lua
+mechanics.lua
