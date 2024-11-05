@@ -6,5 +6,10 @@
 ## DependsOn: CombatAlerts LibAddonMenu-2.0 OdySupportIcons
 ## SavedVariables: OMRSettings
 ## Author: |c0DC1CF@M0R_Gaming|r
+
+util.lua
 rockgrove.lua
+
+bosses/oax.lua
+
 settings.lua
