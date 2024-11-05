@@ -1,0 +1,10 @@
+## Title: |cEFEBBEOne M0R Rockgrove Helper|r
+## APIVersion: 101036
+## Version: 1
+## AddOnVersion: 1
+## Description: Something about rockgrove idk
+## DependsOn: CombatAlerts LibAddonMenu-2.0 OdySupportIcons
+## SavedVariables: OMRSettings
+## Author: |c0DC1CF@M0R_Gaming|r
+rockgrove.lua
+settings.lua
