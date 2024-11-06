@@ -11,20 +11,30 @@ function omr.activateBahsei()
 	EVENT_MANAGER:AddFilterForEvent("OMR Bahsei Cone CCW", EVENT_COMBAT_EVENT, REGISTER_FILTER_ABILITY_ID, 153518)
 	EVENT_MANAGER:AddFilterForEvent("OMR Bahsei Cone CCW", EVENT_COMBAT_EVENT, REGISTER_FILTER_COMBAT_RESULT, ACTION_RESULT_EFFECT_GAINED)
 
-	-- bahsei light attack (for identifying who is (probably) tank)
-	EVENT_MANAGER:RegisterForEvent("OMR Bahsei LA Carve", EVENT_COMBAT_EVENT, omr.onBahseiLightAttack)
-	EVENT_MANAGER:AddFilterForEvent("OMR Bahsei LA Carve", EVENT_COMBAT_EVENT, REGISTER_FILTER_ABILITY_ID, 150047)
-	EVENT_MANAGER:AddFilterForEvent("OMR Bahsei LA Carve", EVENT_COMBAT_EVENT, REGISTER_FILTER_UNIT_TAG_PREFIX, "boss")
-	EVENT_MANAGER:RegisterForEvent("OMR Bahsei LA Slice", EVENT_COMBAT_EVENT, omr.onBahseiLightAttack)
-	EVENT_MANAGER:AddFilterForEvent("OMR Bahsei LA Slice", EVENT_COMBAT_EVENT, REGISTER_FILTER_ABILITY_ID, 150048)
-	EVENT_MANAGER:AddFilterForEvent("OMR Bahsei LA Slice", EVENT_COMBAT_EVENT, REGISTER_FILTER_UNIT_TAG_PREFIX, "boss")
+	-- bahsei scythe (for identifying who is (probably) tank)
+	EVENT_MANAGER:RegisterForEvent("OMR Bahsei Scythe", EVENT_EFFECT_CHANGED, omr.onBahseiScythe)
+	EVENT_MANAGER:AddFilterForEvent("OMR Bahsei Scythe", EVENT_EFFECT_CHANGED, REGISTER_FILTER_SOURCE_COMBAT_UNIT_TYPE, COMBAT_UNIT_TYPE_NONE)
+	EVENT_MANAGER:AddFilterForEvent("OMR Bahsei Scythe", EVENT_EFFECT_CHANGED, REGISTER_FILTER_UNIT_TAG_PREFIX, 'group')
+	EVENT_MANAGER:AddFilterForEvent("OMR Bahsei Scythe", EVENT_EFFECT_CHANGED, REGISTER_FILTER_ABILITY_ID, 150067)
+
+	-- make the assumption that the tank with the lowest health is bahsei tank before getting concrete evidence from who gets scythed
+	local lowestHealth = 1000000
+	for i=1,12 do
+		local unitTag = "group"..i
+		if (GetGroupMemberSelectedRole(unitTag) == LFG_ROLE_TANK) then
+			local _, max = GetUnitPower(unitTag, COMBAT_MECHANIC_FLAGS_HEALTH)
+			if max < lowestHealth then
+				omr.probTankUnitTag = unitTag
+			end
+		end
+	end
+
 end
 
 function omr.deactivateBahsei()
 	EVENT_MANAGER:UnregisterForEvent("OMR Bahsei Cone CW", EVENT_COMBAT_EVENT)
 	EVENT_MANAGER:UnregisterForEvent("OMR Bahsei Cone CCW", EVENT_COMBAT_EVENT)
-	EVENT_MANAGER:UnregisterForEvent("OMR Bahsei LA Carve", EVENT_COMBAT_EVENT)
-	EVENT_MANAGER:UnregisterForEvent("OMR Bahsei LA Slice", EVENT_COMBAT_EVENT)
+	EVENT_MANAGER:UnregisterForEvent("OMR Bahsei Scythe", EVENT_EFFECT_CHANGED)
 	omr.oldConeId = nil
 	omr.probTankUnitTag = ""
 end
@@ -191,13 +201,12 @@ end
 
 
 
--- idk if this works, I guess we find out?
-function omr.onBahseiLightAttack(_, result, _, abilityName, _, _, sourceName, _, targetName, _, hitValue, _, _, _, sourceUnitId, targetUnitId, abilityId, _)
-	-- filter for:
-	-- source unit id = boss1
-	-- abilityId = light attack (carve or slice) 150047 and 150048
-	omr.probTankUnitTag = targetUnitId
-	d("Light attack: "..targetName.." was hit by "..sourceName.."'s "..abilityName.." (which is a light attack prob)")
+
+-- was previously checking for light attack which is more universal, but since combat event doesnt give unit tags it didnt work
+-- now trying scythe, id 150067
+function omr.onBahseiScythe(_, changeType, _, effectName, unitTag, _, _, _, _, _, _, _, _, unitName, _, abilityId, _) 
+	omr.probTankUnitTag = unitTag
+	--d("Effect: "..effectName.." ("..abilityId..") was applied to "..unitTag.." who is "..tostring(unitName))
 end
 
 

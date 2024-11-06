@@ -45,7 +45,8 @@ function omr.guide.createWriteup()
 						"target unit frame, and when a shield's health reaches 0 it will shoot out a projectile at everyone. Generally for high damage "..
 						"groups, this shield will explode the instant it spawns, and thus high damage groups should roll dodge when they see the "..
 						"shields spawn. If using Rockgrove Helper from Qcell, the queue to dodge is when the shield notification pops up with a number "..
-						"next to it. This number is the amount of shields that went out."
+						"next to it. This number is the amount of shields that went out. The soul weaver also does a mechanic where 3 people get circles "..
+						"below their feet. These circles will one shot someone if they are overlapped, but can also be roll dodged by everyone in it."
 				},
 				{
 					type = "description",
@@ -54,6 +55,50 @@ function omr.guide.createWriteup()
 						"When it charges, it should be either roll dodged or blocked, and it should be relatively easy to kill. There is only one Haj "..
 						"Mota in the entire trial, and it spawns right after trash 1.1. There is also an achievement to keep the Haj Mota alive until "..
 						"the last trash pack before Oax, and then sacrifice it to a geyser."
+				},
+			},
+		},
+		{
+			type = "submenu",
+			name = "|cFFD700Oaxiltso|r",
+			tooltip = "Mechanics for Oaxiltso",
+			controls = {
+				{
+					type = "description",
+					title = "Slam",
+					text = "Oax will occasionally do a mechanic where he slams his hands into the ground and spawn a circle of fire. This circle will "..
+						"one shot any dds in it who do not roll dodge, and deal a large amount of damage to the tank as well. The circle is placed at the "..
+						"feet of the tank who has agro on the boss and the circle will disappear before he creates a new one."
+				},
+				{
+					type = "description",
+					title = "Havocrel Annihilator",
+					text = ""..
+						""..
+						""..
+						""..
+						""..
+						""
+				},
+				{
+					type = "description",
+					title = "",
+					text = ""..
+						""..
+						""..
+						""..
+						""..
+						""
+				},
+				{
+					type = "description",
+					title = "",
+					text = ""..
+						""..
+						""..
+						""..
+						""..
+						""
 				},
 			},
 		},
