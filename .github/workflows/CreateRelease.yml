@@ -1,7 +1,9 @@
 name: CreateRelease
 
 on:
-  workflow_dispatch:
+  push:
+    tags:
+      - "v*.*.*"
 
 jobs:
   hello_world_job:
