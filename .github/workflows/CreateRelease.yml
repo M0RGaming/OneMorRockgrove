@@ -1,0 +1,22 @@
+name: CreateRelease
+
+on:
+  workflow_dispatch:
+
+jobs:
+  hello_world_job:
+    runs-on: ubuntu-latest
+    name: Pushing
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          path: 'OneMorRockgrove'
+
+      - name: Zip release
+        run: 7z a OneMorRockgrove.zip * -xr!*.git*
+
+
+      - name: Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: OneMorRockgrove.zip
