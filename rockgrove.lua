@@ -106,6 +106,8 @@ omr.settings.DefaultSettings = {
 	reverseRed = false,
 	showSafeBorders = false,
 	enableRedIndicator = true,
+	bahseiInitialCW = "Banner",
+	bahseiInitialCCW = "Boring Corner"
 }
 
 

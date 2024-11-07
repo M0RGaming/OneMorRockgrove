@@ -91,13 +91,7 @@ function omr.EnableSafeIndicator()
 end
 
 
-function omr.border(id, duration, colour, enable)
-	if enable then
-		CombatAlerts.ScreenBorderEnable(colour, duration, id)
-	else
-		CombatAlerts.ScreenBorderDisable(id)
-	end
-end
+
 
 
 function omr.DisableSafeIndicator()

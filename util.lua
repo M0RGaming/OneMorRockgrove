@@ -52,3 +52,12 @@ function omr.sendCSA(message, secondMessage, sound)
     messageParams:SetLifespanMS(5500)
     CENTER_SCREEN_ANNOUNCE:AddMessageWithParams(messageParams)
 end
+
+
+function omr.border(id, duration, colour, enable)
+	if enable then
+		CombatAlerts.ScreenBorderEnable(colour, duration, id)
+	else
+		CombatAlerts.ScreenBorderDisable(id)
+	end
+end

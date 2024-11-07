@@ -1,5 +1,5 @@
 local omr = OneMorRockgrove
-
+local vars = omr.vars
 
 
 function omr.activateBahsei()
@@ -10,6 +10,8 @@ function omr.activateBahsei()
 	EVENT_MANAGER:RegisterForEvent("OMR Bahsei Cone CCW", EVENT_COMBAT_EVENT, omr.onBahseiCone)
 	EVENT_MANAGER:AddFilterForEvent("OMR Bahsei Cone CCW", EVENT_COMBAT_EVENT, REGISTER_FILTER_ABILITY_ID, 153518)
 	EVENT_MANAGER:AddFilterForEvent("OMR Bahsei Cone CCW", EVENT_COMBAT_EVENT, REGISTER_FILTER_COMBAT_RESULT, ACTION_RESULT_EFFECT_GAINED)
+
+	-- if vars.goodConePrediction
 
 	-- bahsei scythe (for identifying who is (probably) tank)
 	EVENT_MANAGER:RegisterForEvent("OMR Bahsei Scythe", EVENT_EFFECT_CHANGED, omr.onBahseiScythe)
@@ -128,6 +130,11 @@ omr.bahseiCenter = {
 }
 
 
+
+
+
+
+
 -- tanks position will always be ahead of a portion of the group's position (hopefully), so identify if tank is clockwise or counterclockwise
 -- from group. Then using that, assume that cone is spawning ahead of group and if its going in the same direction as tank then its good cone,
 -- opposite is bad cone
@@ -143,11 +150,13 @@ function omr.onBahseiCone(_, result, _, abilityName, _, _, sourceName, _, target
 		omr.oldConeId = abilityId
 
 		if abilityId == 153517 then
-			omr.sendCSA("|c00FF00BANNER|r", "|cB0B0B0(probably)|r", SOUNDS.BATTLEGROUND_NEARING_VICTORY)
+			--omr.sendCSA("|c00FF00BANNER|r", "|cB0B0B0(probably)|r", SOUNDS.BATTLEGROUND_NEARING_VICTORY)
 			--omr.sendCSA("|c00FF00BORING CORNER|r", "|cB0B0B0(probably)|r", SOUNDS.BATTLEGROUND_NEARING_VICTORY)
+			omr.sendCSA("|c00FF00"..vars.bahseiInitialCW.."|r", "|cB0B0B0(probably)|r", SOUNDS.BATTLEGROUND_NEARING_VICTORY)
 		else
-			omr.sendCSA("|cFF0000BORING CORNER|r", "|cB0B0B0(probably)|r", SOUNDS.TELVAR_MULTIPLIERMAX)
+			--omr.sendCSA("|cFF0000BORING CORNER|r", "|cB0B0B0(probably)|r", SOUNDS.TELVAR_MULTIPLIERMAX)
 			--omr.sendCSA("|cFF0000PORTAL|r", "|cB0B0B0(probably)|r", SOUNDS.TELVAR_MULTIPLIERMAX)
+			omr.sendCSA("|cFF0000"..vars.bahseiInitialCCW.."|r", "|cB0B0B0(probably)|r", SOUNDS.TELVAR_MULTIPLIERMAX)
 		end
 
 		return
@@ -217,8 +226,10 @@ end
 
 function omr.goodCone()
 	omr.sendCSA("|c00FF00GOOD CONE|r", "|cB0B0B0(probably)|r", SOUNDS.BATTLEGROUND_NEARING_VICTORY)
+	omr.border("OMR Bahsei Good Cone", 1000, 0x00FF001A, true)
 end
 
 function omr.badCone()
 	omr.sendCSA("|cFF0000BAD CONE|r", "|cB0B0B0(probably)|r", SOUNDS.TELVAR_MULTIPLIERMAX)
+	omr.border("OMR Bahsei Bad Cone", 1000, 0xFF00001A, true)
 end
