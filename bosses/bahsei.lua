@@ -15,7 +15,7 @@ function omr.activateBahsei()
 
 	-- bahsei scythe (for identifying who is (probably) tank)
 	EVENT_MANAGER:RegisterForEvent("OMR Bahsei Scythe", EVENT_EFFECT_CHANGED, omr.onBahseiScythe)
-	EVENT_MANAGER:AddFilterForEvent("OMR Bahsei Scythe", EVENT_EFFECT_CHANGED, REGISTER_FILTER_SOURCE_COMBAT_UNIT_TYPE, COMBAT_UNIT_TYPE_NONE)
+	--EVENT_MANAGER:AddFilterForEvent("OMR Bahsei Scythe", EVENT_EFFECT_CHANGED, REGISTER_FILTER_SOURCE_COMBAT_UNIT_TYPE, COMBAT_UNIT_TYPE_NONE)
 	EVENT_MANAGER:AddFilterForEvent("OMR Bahsei Scythe", EVENT_EFFECT_CHANGED, REGISTER_FILTER_UNIT_TAG_PREFIX, 'group')
 	EVENT_MANAGER:AddFilterForEvent("OMR Bahsei Scythe", EVENT_EFFECT_CHANGED, REGISTER_FILTER_ABILITY_ID, 150067)
 
@@ -41,6 +41,7 @@ function omr.deactivateBahsei()
 	omr.probTankUnitTag = ""
 end
 
+omr.bossRegistry[2] = omr.activateBahsei
 
 
 

@@ -19,7 +19,7 @@ end
 
 
 
-
+omr.bossRegistry[1] = omr.activateOax
 
 
 
