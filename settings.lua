@@ -11,6 +11,13 @@ function omr.settings.createSettings()
 		slashCommand = "/omr"
 	}
 
+	local bahseicorners = {
+		"Banner",
+		"Portal",
+		"Boring Corner",
+		"Entrance"
+	}
+
 	local optionsTable = {
 		{
 			type = "header",
@@ -40,8 +47,41 @@ function omr.settings.createSettings()
 			setFunc = function(value) vars.showSafeBorders = value end,
 		},
 		{
-			type = "divider",
-		}
+			type = "header",
+			name = "|cFFD700Bahsei|r",
+		},
+		{
+			type = "checkbox",
+			name = "Enable Bahsei Good Cone Prediction",
+			tooltip = "Plays a notification based on if bahsei's cone is probably a good cone or not.",
+			getFunc = function() return vars.goodConePrediction end,
+			setFunc = function(value) vars.goodConePrediction = value end,
+		},
+		{
+			type = "checkbox",
+			name = "Enable Bahsei Initial Cone Positioning",
+			tooltip = "Plays a notification when the first cone goes out for bahsei indicating where to go.",
+			getFunc = function() return vars.initialConeIndicator end,
+			setFunc = function(value) vars.initialConeIndicator = value end,
+		},
+		{
+			type = "dropdown",
+			name = "Initial CW Position",
+			tooltip = "Which corner should pop up if Bahsei does a clockwise cone to start.",
+			choices = bahseicorners,
+			getFunc = function() return vars.bahseiInitialCW end,
+			setFunc = function(value) vars.bahseiInitialCW = value end,
+			width = "half",
+		},
+		{
+			type = "dropdown",
+			name = "Initial CCW Position",
+			tooltip = "Which corner should pop up if Bahsei does a counter-clockwise cone to start.",
+			choices = bahseicorners,
+			getFunc = function() return vars.bahseiInitialCCW end,
+			setFunc = function(value) vars.bahseiInitialCCW = value end,
+			width = "half",
+		},
 	}
 
 

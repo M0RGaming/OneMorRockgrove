@@ -107,7 +107,9 @@ omr.settings.DefaultSettings = {
 	showSafeBorders = false,
 	enableRedIndicator = true,
 	bahseiInitialCW = "Banner",
-	bahseiInitialCCW = "Boring Corner"
+	bahseiInitialCCW = "Boring Corner",
+	goodConePrediction = true,
+	initialConeIndicator = true,
 }
 
 

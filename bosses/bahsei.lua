@@ -1,5 +1,4 @@
 local omr = OneMorRockgrove
-local vars = omr.vars
 
 
 function omr.activateBahsei()
@@ -11,7 +10,8 @@ function omr.activateBahsei()
 	EVENT_MANAGER:AddFilterForEvent("OMR Bahsei Cone CCW", EVENT_COMBAT_EVENT, REGISTER_FILTER_ABILITY_ID, 153518)
 	EVENT_MANAGER:AddFilterForEvent("OMR Bahsei Cone CCW", EVENT_COMBAT_EVENT, REGISTER_FILTER_COMBAT_RESULT, ACTION_RESULT_EFFECT_GAINED)
 
-	-- if vars.goodConePrediction
+	-- The rest is for bahsei cones so just exit if not enabled.
+	if not omr.vars.goodConePrediction then return end
 
 	-- bahsei scythe (for identifying who is (probably) tank)
 	EVENT_MANAGER:RegisterForEvent("OMR Bahsei Scythe", EVENT_EFFECT_CHANGED, omr.onBahseiScythe)
@@ -148,20 +148,17 @@ omr.oldConeId = nil
 function omr.onBahseiCone(_, result, _, abilityName, _, _, sourceName, _, targetName, _, hitValue, _, _, _, sourceUnitId, targetUnitId, abilityId)
 	if omr.oldConeId == nil then
 		omr.oldConeId = abilityId
-
-		if abilityId == 153517 then
-			--omr.sendCSA("|c00FF00BANNER|r", "|cB0B0B0(probably)|r", SOUNDS.BATTLEGROUND_NEARING_VICTORY)
-			--omr.sendCSA("|c00FF00BORING CORNER|r", "|cB0B0B0(probably)|r", SOUNDS.BATTLEGROUND_NEARING_VICTORY)
-			omr.sendCSA("|c00FF00"..vars.bahseiInitialCW.."|r", "|cB0B0B0(probably)|r", SOUNDS.BATTLEGROUND_NEARING_VICTORY)
-		else
-			--omr.sendCSA("|cFF0000BORING CORNER|r", "|cB0B0B0(probably)|r", SOUNDS.TELVAR_MULTIPLIERMAX)
-			--omr.sendCSA("|cFF0000PORTAL|r", "|cB0B0B0(probably)|r", SOUNDS.TELVAR_MULTIPLIERMAX)
-			omr.sendCSA("|cFF0000"..vars.bahseiInitialCCW.."|r", "|cB0B0B0(probably)|r", SOUNDS.TELVAR_MULTIPLIERMAX)
+		if omr.vars.initialConeIndicator then
+			if abilityId == 153517 then
+				omr.sendCSA("|c00FF00"..omr.vars.bahseiInitialCW.."|r", "|cB0B0B0(probably)|r", SOUNDS.BATTLEGROUND_NEARING_VICTORY)
+			else
+				omr.sendCSA("|cFF0000"..omr.vars.bahseiInitialCCW.."|r", "|cB0B0B0(probably)|r", SOUNDS.TELVAR_MULTIPLIERMAX)
+			end
 		end
-
 		return
 	end
 
+	if not omr.vars.goodConePrediction then return end
 
 	-- get group position and normalize with origin at center of bahsei's arena
 	local groupPositions = {}
@@ -215,7 +212,7 @@ end
 -- now trying scythe, id 150067
 function omr.onBahseiScythe(_, changeType, _, effectName, unitTag, _, _, _, _, _, _, _, _, unitName, _, abilityId, _) 
 	omr.probTankUnitTag = unitTag
-	--d("Effect: "..effectName.." ("..abilityId..") was applied to "..unitTag.." who is "..tostring(unitName))
+	d("Effect: "..effectName.." ("..abilityId..") was applied to "..unitTag.." who is "..tostring(unitName))
 end
 
 
