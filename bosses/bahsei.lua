@@ -142,12 +142,18 @@ function omr.onBahseiCone(_, result, _, abilityName, _, _, sourceName, _, target
 	--d("Tank Theta = ".. tankTheta)
 
 
+	local deltaTheta = tankTheta-groupTheta
+	deltaTheta = (deltaTheta + pi) % (2*pi) - pi -- normalize it
+
+
+
 	-- based on the rotation which the tank is oriented relative to the group, identify which direction would be a good cone
+	-- negative pi is west coming from the north, and positive pi is west coming from the south.
 	local goodCone = 0
-	if tankTheta < groupTheta then
-		goodCone = 153517 -- good cone is cw
-	else
+	if deltaTheta < 0 then
 		goodCone = 153518 -- good cone is ccw
+	else
+		goodCone = 153517 -- good cone is cw
 	end
 
 
