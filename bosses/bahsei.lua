@@ -96,7 +96,7 @@ end
 function omr.onBahseiLightAttack(_, result, _, abilityName, _, _, sourceName, _, targetName, _, hitValue, _, _, _, sourceUnitId, targetUnitId, abilityId, _)
 	-- abilityId = light attack (carve or slice) 150047 and 150048
 	local unitTag = omr.idLookup[targetUnitId]
-	if not unitTag then return
+	if not unitTag then return end
 	omr.probTankUnitTag = unitTag
 	d("Light attack: "..GetUnitDisplayName(unitTag).." was hit by "..tostring(sourceName).."'s "..tostring(abilityName).." (which is a light attack prob)")
 end
