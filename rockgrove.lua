@@ -104,10 +104,10 @@ omr.varversion = 1
 omr.settings = {}
 omr.settings.DefaultSettings = {
 	reverseRed = false,
-	showSafeBorders = false,
-	enableRedIndicator = true,
-	bahseiInitialCW = "Banner",
-	bahseiInitialCCW = "Boring Corner",
+	showSafeBorders = true,
+	enableRedIndicator = false,
+	bahseiInitialCW = "Boring Corner",
+	bahseiInitialCCW = "Portal",
 	goodConePrediction = true,
 	initialConeIndicator = true,
 }

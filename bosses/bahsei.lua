@@ -30,7 +30,7 @@ function omr.activateBahsei()
 	EVENT_MANAGER:RegisterForEvent("OMR Bahsei LA Slice", EVENT_COMBAT_EVENT, omr.onBahseiLightAttack)
 	EVENT_MANAGER:AddFilterForEvent("OMR Bahsei LA Slice", EVENT_COMBAT_EVENT, REGISTER_FILTER_ABILITY_ID, 150048)
 
-	-- make the assumption that the tank with the lowest health is bahsei tank before getting concrete evidence from who gets scythed
+	-- make the assumption that the tank with the lowest health is bahsei tank before getting concrete evidence from who gets attacked
 	local lowestHealth = 1000000
 	for i=1,12 do
 		local unitTag = "group"..i
@@ -98,7 +98,7 @@ function omr.onBahseiLightAttack(_, result, _, abilityName, _, _, sourceName, _,
 	local unitTag = omr.idLookup[targetUnitId]
 	if not unitTag then return end
 	omr.probTankUnitTag = unitTag
-	d("Light attack: "..GetUnitDisplayName(unitTag).." was hit by "..tostring(sourceName).."'s "..tostring(abilityName).." (which is a light attack prob)")
+	--d("Light attack: "..GetUnitDisplayName(unitTag).." was hit by "..tostring(sourceName).."'s "..tostring(abilityName).." (which is a light attack prob)")
 end
 
 
@@ -151,11 +151,11 @@ function omr.onBahseiCone(_, result, _, abilityName, _, _, sourceName, _, target
 	end
 
 	local avgx, avgz = omr.distanceWeightedMean(groupPositions) -- calc xbar and zbar with dwm on dps locations. DWM should take care of outliers
-	local groupTheta = math.atan(avgz/avgx)
+	local groupTheta = math.atan2(avgz,avgx)
 	d("Group Theta = ".. groupTheta)
 	-- Calc Group and Tank theta in respect to the center of bahsei's arena. 
 	local world, tx, ty, tz = GetUnitRawWorldPosition(omr.probTankUnitTag)
-	local tankTheta = math.atan(tz-bz/tx-bx)
+	local tankTheta = math.atan2((tz-bz),(tx-bx))
 	d("Tank Theta = ".. tankTheta)
 
 

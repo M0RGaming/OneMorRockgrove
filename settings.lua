@@ -47,6 +47,23 @@ function omr.settings.createSettings()
 			setFunc = function(value) vars.showSafeBorders = value end,
 		},
 		{
+			type = "description",
+			text = "The following buttons can be used to temporarily show or hide oax borders outside of combat. In a future update "..
+				"this will be a toggle but for now it is just a button."
+		},
+		{
+			type = "button",
+			name = "Display Oax Borders",
+			width = "half",
+			func = function() omr.createSafeBorders() end,
+		},
+		{
+			type = "button",
+			name = "Hide Oax Borders",
+			width = "half",
+			func = function() omr.destroySafeBorders() end,
+		},
+		{
 			type = "header",
 			name = "|cFFD700Bahsei|r",
 		},
