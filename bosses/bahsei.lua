@@ -143,8 +143,9 @@ function omr.onBahseiCone(_, result, _, abilityName, _, _, sourceName, _, target
 
 
 	local deltaTheta = tankTheta-groupTheta
-	deltaTheta = (deltaTheta + pi) % (2*pi) - pi -- normalize it
+	deltaTheta = (deltaTheta + math.pi) % (2*math.pi) - math.pi -- normalize it
 
+	d("Delta Theta is "..deltaTheta)
 
 
 	-- based on the rotation which the tank is oriented relative to the group, identify which direction would be a good cone
