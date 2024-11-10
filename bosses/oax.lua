@@ -133,7 +133,9 @@ end
 
 
 SLASH_COMMANDS['/enableoaxred'] = omr.EnableSafeIndicator
+SLASH_COMMANDS['/showoaxborders'] = omr.createSafeBorders
 SLASH_COMMANDS['/disableoaxred'] = omr.DisableSafeIndicator
+SLASH_COMMANDS['/hideoaxborders'] = omr.destroySafeBorders
 
 SLASH_COMMANDS['/swapoaxred'] = function()
 	omr.vars.reverseRed = not omr.vars.reverseRed

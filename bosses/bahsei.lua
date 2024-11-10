@@ -14,10 +14,21 @@ function omr.activateBahsei()
 	if not omr.vars.goodConePrediction then return end
 
 	-- bahsei scythe (for identifying who is (probably) tank)
-	EVENT_MANAGER:RegisterForEvent("OMR Bahsei Scythe", EVENT_EFFECT_CHANGED, omr.onBahseiScythe)
+	--EVENT_MANAGER:RegisterForEvent("OMR Bahsei Scythe", EVENT_EFFECT_CHANGED, omr.onBahseiScythe)
 	--EVENT_MANAGER:AddFilterForEvent("OMR Bahsei Scythe", EVENT_EFFECT_CHANGED, REGISTER_FILTER_SOURCE_COMBAT_UNIT_TYPE, COMBAT_UNIT_TYPE_NONE)
-	EVENT_MANAGER:AddFilterForEvent("OMR Bahsei Scythe", EVENT_EFFECT_CHANGED, REGISTER_FILTER_UNIT_TAG_PREFIX, 'group')
-	EVENT_MANAGER:AddFilterForEvent("OMR Bahsei Scythe", EVENT_EFFECT_CHANGED, REGISTER_FILTER_ABILITY_ID, 150067)
+	--EVENT_MANAGER:AddFilterForEvent("OMR Bahsei Scythe", EVENT_EFFECT_CHANGED, REGISTER_FILTER_UNIT_TAG_PREFIX, 'group')
+	--EVENT_MANAGER:AddFilterForEvent("OMR Bahsei Scythe", EVENT_EFFECT_CHANGED, REGISTER_FILTER_ABILITY_ID, 150067)
+
+
+	EVENT_MANAGER:RegisterForEvent("OMR ID Identification", EVENT_EFFECT_CHANGED, omr.idIdentification)
+	EVENT_MANAGER:AddFilterForEvent("OMR ID Identification", EVENT_EFFECT_CHANGED, REGISTER_FILTER_UNIT_TAG_PREFIX, 'group')
+
+
+	-- bahsei light attack (for identifying who is (probably) tank)
+	EVENT_MANAGER:RegisterForEvent("OMR Bahsei LA Carve", EVENT_COMBAT_EVENT, omr.onBahseiLightAttack)
+	EVENT_MANAGER:AddFilterForEvent("OMR Bahsei LA Carve", EVENT_COMBAT_EVENT, REGISTER_FILTER_ABILITY_ID, 150047)
+	EVENT_MANAGER:RegisterForEvent("OMR Bahsei LA Slice", EVENT_COMBAT_EVENT, omr.onBahseiLightAttack)
+	EVENT_MANAGER:AddFilterForEvent("OMR Bahsei LA Slice", EVENT_COMBAT_EVENT, REGISTER_FILTER_ABILITY_ID, 150048)
 
 	-- make the assumption that the tank with the lowest health is bahsei tank before getting concrete evidence from who gets scythed
 	local lowestHealth = 1000000
@@ -36,80 +47,18 @@ end
 function omr.deactivateBahsei()
 	EVENT_MANAGER:UnregisterForEvent("OMR Bahsei Cone CW", EVENT_COMBAT_EVENT)
 	EVENT_MANAGER:UnregisterForEvent("OMR Bahsei Cone CCW", EVENT_COMBAT_EVENT)
-	EVENT_MANAGER:UnregisterForEvent("OMR Bahsei Scythe", EVENT_EFFECT_CHANGED)
+	--EVENT_MANAGER:UnregisterForEvent("OMR Bahsei Scythe", EVENT_EFFECT_CHANGED)
+	EVENT_MANAGER:UnregisterForEvent("OMR Bahsei LA Carve", EVENT_COMBAT_EVENT)
+	EVENT_MANAGER:UnregisterForEvent("OMR Bahsei LA Slice", EVENT_COMBAT_EVENT)
+	EVENT_MANAGER:UnregisterForEvent("OMR ID Identification", EVENT_EFFECT_CHANGED)
 	omr.oldConeId = nil
 	omr.probTankUnitTag = ""
+	omr.idLookup = {}
 end
 
 omr.bossRegistry[2] = omr.activateBahsei
 
 
-
-
-
--- {marker, offset}
-omr.markers = {}
-omr.markerStartingPosition = {0,0}
-omr.markerXScaling = 1
-omr.markerYScaling = 1
-
-
--- cant procede with this until i reach bahsei
--- maybe make this also go below your feet?
-function omr.createBahseiPins()
-
-	local _, x, y, z = GetUnitRawWorldPosition( "player" )
-
-	local positions = {
-		{x-100,y,z-100},
-		{x,y,z-100},
-		{x+100,y,z-100},
-		{x+100,y,z},
-		{x+100,y,z+100},
-		{x,y,z+100},
-		{x-100,y,z+100},
-		{x-100,y,z},
-	}
-
-	for i,v in pairs(positions) do
-		omr.markers[#omr.markers+1] = {OSI.CreatePositionIcon(v[1], v[2], v[3], "OdySupportIcons/icons/squares/marker_lightblue.dds", 50),(i-1)*100}
-	end
-
-	omr.markerStartingPosition = {x-100, z-100}
-
-end
-
-
-function omr.rotateMarkers(distance)
-
-	for i,v in pairs(omr.markers) do
-		v[2] = v[2] + distance
-
-		if v[2] >= 800 then v[2] = v[2] - 800 end
-
-		local currentSide = zo_floor(v[2]/200)
-		local currentOffset = v[2]%200
-
-
-		if currentSide == 0 then
-			v[1].x = omr.markerStartingPosition[1] + currentOffset
-			v[1].z = omr.markerStartingPosition[2]
-		elseif currentSide == 1 then
-			v[1].x = omr.markerStartingPosition[1] + 200
-			v[1].z = omr.markerStartingPosition[2] + currentOffset
-		elseif currentSide == 2 then
-			v[1].x = (omr.markerStartingPosition[1] + 200) - currentOffset
-			v[1].z = omr.markerStartingPosition[2] + 200
-		elseif currentSide == 3 then
-			v[1].z = (omr.markerStartingPosition[2] + 200) - currentOffset
-			v[1].x = omr.markerStartingPosition[1]
-		end
-
-	end
-end
-
---SLASH_COMMANDS['/setup'] = omr.createBahseiPins
---SLASH_COMMANDS['/move'] = omr.rotateMarkers
 
 
 
@@ -130,7 +79,33 @@ omr.bahseiCenter = {
 	(omr.bahseiCorners[1][3]+omr.bahseiCorners[3][3])/2
 }
 
+omr.idLookup = {}
 
+
+
+-- was previously checking for light attack which is more universal, but since combat event doesnt give unit tags it didnt work
+-- now trying scythe, id 150067
+function omr.onBahseiScythe(_, changeType, _, effectName, unitTag, _, _, _, _, _, _, _, _, unitName, _, abilityId, _) 
+	omr.probTankUnitTag = unitTag
+	--d("Effect: "..effectName.." ("..abilityId..") was applied to "..unitTag.." who is "..tostring(unitName))
+end
+
+
+
+
+function omr.onBahseiLightAttack(_, result, _, abilityName, _, _, sourceName, _, targetName, _, hitValue, _, _, _, sourceUnitId, targetUnitId, abilityId, _)
+	-- abilityId = light attack (carve or slice) 150047 and 150048
+	local unitTag = omr.idLookup[targetUnitId]
+	if not unitTag then return
+	omr.probTankUnitTag = unitTag
+	d("Light attack: "..GetUnitDisplayName(unitTag).." was hit by "..tostring(sourceName).."'s "..tostring(abilityName).." (which is a light attack prob)")
+end
+
+
+function omr.idIdentification(_, _, _, effectName, unitTag, _, _, _, _, _, _, _, _, unitName, unitId, abilityId, _)
+	omr.idLookup[unitId] = unitTag
+	--d("ID Identification: "..unitTag.." has a id of "..unitId.." since they had "..effectName.." ("..abilityId..") on them")
+end
 
 
 
@@ -209,12 +184,7 @@ end
 
 
 
--- was previously checking for light attack which is more universal, but since combat event doesnt give unit tags it didnt work
--- now trying scythe, id 150067
-function omr.onBahseiScythe(_, changeType, _, effectName, unitTag, _, _, _, _, _, _, _, _, unitName, _, abilityId, _) 
-	omr.probTankUnitTag = unitTag
-	d("Effect: "..effectName.." ("..abilityId..") was applied to "..unitTag.." who is "..tostring(unitName))
-end
+
 
 
 
@@ -231,3 +201,82 @@ function omr.badCone()
 	omr.sendCSA("|cFF0000BAD CONE|r", "|cB0B0B0(probably)|r", SOUNDS.TELVAR_MULTIPLIERMAX)
 	omr.border("OMR Bahsei Bad Cone", 1000, 0xFF00001A, true)
 end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-- {marker, offset}
+omr.markers = {}
+omr.markerStartingPosition = {0,0}
+omr.markerXScaling = 1
+omr.markerYScaling = 1
+
+
+-- cant procede with this until i reach bahsei
+-- maybe make this also go below your feet?
+function omr.createBahseiPins()
+
+	local _, x, y, z = GetUnitRawWorldPosition( "player" )
+
+	local positions = {
+		{x-100,y,z-100},
+		{x,y,z-100},
+		{x+100,y,z-100},
+		{x+100,y,z},
+		{x+100,y,z+100},
+		{x,y,z+100},
+		{x-100,y,z+100},
+		{x-100,y,z},
+	}
+
+	for i,v in pairs(positions) do
+		omr.markers[#omr.markers+1] = {OSI.CreatePositionIcon(v[1], v[2], v[3], "OdySupportIcons/icons/squares/marker_lightblue.dds", 50),(i-1)*100}
+	end
+
+	omr.markerStartingPosition = {x-100, z-100}
+
+end
+
+
+function omr.rotateMarkers(distance)
+
+	for i,v in pairs(omr.markers) do
+		v[2] = v[2] + distance
+
+		if v[2] >= 800 then v[2] = v[2] - 800 end
+
+		local currentSide = zo_floor(v[2]/200)
+		local currentOffset = v[2]%200
+
+
+		if currentSide == 0 then
+			v[1].x = omr.markerStartingPosition[1] + currentOffset
+			v[1].z = omr.markerStartingPosition[2]
+		elseif currentSide == 1 then
+			v[1].x = omr.markerStartingPosition[1] + 200
+			v[1].z = omr.markerStartingPosition[2] + currentOffset
+		elseif currentSide == 2 then
+			v[1].x = (omr.markerStartingPosition[1] + 200) - currentOffset
+			v[1].z = omr.markerStartingPosition[2] + 200
+		elseif currentSide == 3 then
+			v[1].z = (omr.markerStartingPosition[2] + 200) - currentOffset
+			v[1].x = omr.markerStartingPosition[1]
+		end
+
+	end
+end
+
+--SLASH_COMMANDS['/setup'] = omr.createBahseiPins
+--SLASH_COMMANDS['/move'] = omr.rotateMarkers
