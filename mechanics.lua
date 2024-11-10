@@ -73,32 +73,42 @@ function omr.guide.createWriteup()
 				{
 					type = "description",
 					title = "Havocrel Annihilator",
-					text = ""..
-						""..
-						""..
-						""..
-						""..
-						""
+					text = "At 90%, 75%, 50%, and 25%, oax will spawn a Havocrel Annihilator who does a few mechanics that need to be worried about. "..
+						"After a couple of seconds of spawning, the miniboss will create a circle around it. If this circle touches either Oax or another "..
+						"mini, then the enemy it touches will enrage and do a ton of damage. The minis will also create metors on the ground when they "..
+						"cast their heavy attack. When this happens dps will need to block the metors or else they will be stunned and tank a bunch of "..
+						"damage. Finally, the minis will randomly chain people in and put a cone on someone. This cone will track the person with it "..
+						"and follow them around so it should not be swung. If the cone is not roll dodged before it goes off, everyone who got hit will "..
+						"gain a massive dot on them."
 				},
 				{
 					type = "description",
-					title = "",
-					text = ""..
-						""..
-						""..
-						""..
-						""..
-						""
+					title = "Poisons",
+					text = "At various points throughout the fight, Oax will spit poison at 2 random people outside of the safe zones around each pool. "..
+						"If there are not 2 people outside of the safe zone when Oax spits his poisons, then someone inside the pool will randomly get "..
+						"the poison. When someone has this poison effect on them, they will be dropping AOE puddles on the ground below their feet "..
+						"which will do a ton of damage to anyone staying within them. To cleanse these poison effects, the people with the poison will "..
+						"need to walk into one of the four pools around the room. However, after cleansing in a pool, frogs will start spawning from "..
+						"the pool that was used, and so a pool close to group should be used to cleanse to ensure frogs dont build up."
 				},
 				{
 					type = "description",
-					title = "",
-					text = ""..
-						""..
-						""..
-						""..
-						""..
-						""
+					title = "Charges",
+					text = "At various points throughout the fight, Oax will turn to look at the furthest person away (within a maximum distance) and "..
+						"after a few seconds charge at them. Anyone in the path of this charge will take alot of damage and usually die. To mitigate "..
+						"this, usually one healer is intentionally standing the furthest away when the charges are about to happen. After Oax chooses "..
+						"someone to charge at, he is locked into charging at them, so the person being targetted can run towards and roll dodge through "..
+						"him. This will cause the charge to end earlier as he has to move less distance, and is great to ensure that Oax stays in dots."
+				},
+				{
+					type = "description",
+					title = "Hardmode Mechanics",
+					text = "In hardmode, Oax has more health and does more damage, but there are also 2 more mechanics that need to be worried about. "..
+						"At various points throughout the fight Oax will turn one of the pools around the arena into lava, causing it to no longer "..
+						"be able to cleanse people. This will usually prioritize the pools that the group have not been using, but at around 25% there "..
+						"will only be 1 pool left remaining so healers with poison will need to alternate who clenases. In addition to the poison pools "..
+						"disappearing, Oax will also charge twice in a row below 50% health. Because of this, cancelling charges becomes more important "..
+						"as it will ensure that the correct people get charges, and not someone standing with the mini."
 				},
 			},
 		},

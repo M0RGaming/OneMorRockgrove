@@ -17,6 +17,7 @@ function omr.deactivateOax()
 	omr.destroySafeBorders()
 end
 
+-- note for self for later - add option to make borders create on boss activated not just combat started
 
 
 omr.bossRegistry[1] = omr.activateOax
@@ -71,7 +72,6 @@ end
 
 
 
---omr.reverseRed = false
 local red = omr.vars.reverseRed -- originally false, but made to be reverse red since behaviour is reversed
 -- OAX POISON SAFE ZONE
 function omr.EnableSafeIndicator()
@@ -104,7 +104,6 @@ end
 
 
 
---omr.showSafeBorders = false
 omr.markersEntranceLeft = {}
 omr.markersExitLeft = {}
 
@@ -132,10 +131,11 @@ end
 
 
 
-SLASH_COMMANDS['/enableoaxred'] = omr.EnableSafeIndicator
 SLASH_COMMANDS['/showoaxborders'] = omr.createSafeBorders
-SLASH_COMMANDS['/disableoaxred'] = omr.DisableSafeIndicator
 SLASH_COMMANDS['/hideoaxborders'] = omr.destroySafeBorders
+--[[
+SLASH_COMMANDS['/enableoaxred'] = omr.EnableSafeIndicator
+SLASH_COMMANDS['/disableoaxred'] = omr.DisableSafeIndicator
 
 SLASH_COMMANDS['/swapoaxred'] = function()
 	omr.vars.reverseRed = not omr.vars.reverseRed
@@ -145,3 +145,4 @@ SLASH_COMMANDS['/swapoaxborders'] = function()
 	omr.vars.showSafeBorders = not omr.vars.showSafeBorders
 	d("One Mor Rockgrove: Show Safe Borders is now: "..tostring(omr.vars.showSafeBorders))
 end
+--]]

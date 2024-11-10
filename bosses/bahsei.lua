@@ -13,16 +13,9 @@ function omr.activateBahsei()
 	-- The rest is for bahsei cones so just exit if not enabled.
 	if not omr.vars.goodConePrediction then return end
 
-	-- bahsei scythe (for identifying who is (probably) tank)
-	--EVENT_MANAGER:RegisterForEvent("OMR Bahsei Scythe", EVENT_EFFECT_CHANGED, omr.onBahseiScythe)
-	--EVENT_MANAGER:AddFilterForEvent("OMR Bahsei Scythe", EVENT_EFFECT_CHANGED, REGISTER_FILTER_SOURCE_COMBAT_UNIT_TYPE, COMBAT_UNIT_TYPE_NONE)
-	--EVENT_MANAGER:AddFilterForEvent("OMR Bahsei Scythe", EVENT_EFFECT_CHANGED, REGISTER_FILTER_UNIT_TAG_PREFIX, 'group')
-	--EVENT_MANAGER:AddFilterForEvent("OMR Bahsei Scythe", EVENT_EFFECT_CHANGED, REGISTER_FILTER_ABILITY_ID, 150067)
-
-
+	-- correlate userIds to unitTags
 	EVENT_MANAGER:RegisterForEvent("OMR ID Identification", EVENT_EFFECT_CHANGED, omr.idIdentification)
 	EVENT_MANAGER:AddFilterForEvent("OMR ID Identification", EVENT_EFFECT_CHANGED, REGISTER_FILTER_UNIT_TAG_PREFIX, 'group')
-
 
 	-- bahsei light attack (for identifying who is (probably) tank)
 	EVENT_MANAGER:RegisterForEvent("OMR Bahsei LA Carve", EVENT_COMBAT_EVENT, omr.onBahseiLightAttack)
@@ -47,7 +40,6 @@ end
 function omr.deactivateBahsei()
 	EVENT_MANAGER:UnregisterForEvent("OMR Bahsei Cone CW", EVENT_COMBAT_EVENT)
 	EVENT_MANAGER:UnregisterForEvent("OMR Bahsei Cone CCW", EVENT_COMBAT_EVENT)
-	--EVENT_MANAGER:UnregisterForEvent("OMR Bahsei Scythe", EVENT_EFFECT_CHANGED)
 	EVENT_MANAGER:UnregisterForEvent("OMR Bahsei LA Carve", EVENT_COMBAT_EVENT)
 	EVENT_MANAGER:UnregisterForEvent("OMR Bahsei LA Slice", EVENT_COMBAT_EVENT)
 	EVENT_MANAGER:UnregisterForEvent("OMR ID Identification", EVENT_EFFECT_CHANGED)
@@ -80,15 +72,6 @@ omr.bahseiCenter = {
 }
 
 omr.idLookup = {}
-
-
-
--- was previously checking for light attack which is more universal, but since combat event doesnt give unit tags it didnt work
--- now trying scythe, id 150067
-function omr.onBahseiScythe(_, changeType, _, effectName, unitTag, _, _, _, _, _, _, _, _, unitName, _, abilityId, _) 
-	omr.probTankUnitTag = unitTag
-	--d("Effect: "..effectName.." ("..abilityId..") was applied to "..unitTag.." who is "..tostring(unitName))
-end
 
 
 
@@ -152,11 +135,11 @@ function omr.onBahseiCone(_, result, _, abilityName, _, _, sourceName, _, target
 
 	local avgx, avgz = omr.distanceWeightedMean(groupPositions) -- calc xbar and zbar with dwm on dps locations. DWM should take care of outliers
 	local groupTheta = math.atan2(avgz,avgx)
-	d("Group Theta = ".. groupTheta)
+	--d("Group Theta = ".. groupTheta)
 	-- Calc Group and Tank theta in respect to the center of bahsei's arena. 
 	local world, tx, ty, tz = GetUnitRawWorldPosition(omr.probTankUnitTag)
 	local tankTheta = math.atan2((tz-bz),(tx-bx))
-	d("Tank Theta = ".. tankTheta)
+	--d("Tank Theta = ".. tankTheta)
 
 
 	-- based on the rotation which the tank is oriented relative to the group, identify which direction would be a good cone
@@ -212,7 +195,7 @@ end
 
 
 
-
+-- the following isnt being used yet, it will eventually place markers around the arena and rotate based on how cone is rotating
 
 
 
@@ -224,7 +207,6 @@ omr.markerXScaling = 1
 omr.markerYScaling = 1
 
 
--- cant procede with this until i reach bahsei
 -- maybe make this also go below your feet?
 function omr.createBahseiPins()
 
