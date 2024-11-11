@@ -83,13 +83,19 @@ omr.bossRegistry = {
 	[2] = omr.activateBahsei
 }
 
+-- /script SetCVar("language.2", "de")
 -- /script CHAT_SYSTEM:StartTextEntry(string.lower(GetUnitName("boss1")))
 omr.bossLookup = { -- for other languages
 	["oaxiltso"] = 1,
 	["оазилцо"] = 1,
 	["奥西索"] = 1,
 	["bahsei"] = 2,
-	["flame-herald bahsei"] = 2
+	["flame-herald bahsei"] = 2, -- en
+	["flammenheroldin bahsei"] = 2, -- de
+	["bahsei la emisaria del fuego"] = 2, -- es
+	["le héraut des flammes bahsei"] = 2, --fr
+	["басей вестница пламени"] = 2, --ru
+	["烈焰先驱巴塞"] = 2 --zh
 }
 
 

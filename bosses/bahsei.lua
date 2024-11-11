@@ -23,19 +23,42 @@ function omr.activateBahsei()
 	EVENT_MANAGER:RegisterForEvent("OMR Bahsei LA Slice", EVENT_COMBAT_EVENT, omr.onBahseiLightAttack)
 	EVENT_MANAGER:AddFilterForEvent("OMR Bahsei LA Slice", EVENT_COMBAT_EVENT, REGISTER_FILTER_ABILITY_ID, 150048)
 
-	-- make the assumption that the tank with the lowest health is bahsei tank before getting concrete evidence from who gets attacked
-	local lowestHealth = 1000000
-	for i=1,12 do
-		local unitTag = "group"..i
-		if (GetGroupMemberSelectedRole(unitTag) == LFG_ROLE_TANK) then
-			local _, max = GetUnitPower(unitTag, COMBAT_MECHANIC_FLAGS_HEALTH)
-			if max < lowestHealth then
-				omr.probTankUnitTag = unitTag
+
+
+	local current, max = GetUnitPower('boss1',COMBAT_MECHANIC_FLAGS_HEALTH)
+	if (current/max) < 0.95 then -- fight hasnt actually just started, instead the player just got pulled in or left portal
+		d("Loading old vars since it looks like its not a wipe.")
+		omr.oldConeId = omr.oldvars.oldConeId
+		omr.probTankUnitTag = omr.oldvars.probTankUnitTag
+	else
+		omr.oldvars = {
+			["oldConeId"] = nil,
+			["probTankUnitTag"] = "",
+		}
+	end
+
+	if omr.probTankUnitTag == "" then
+		-- make the assumption that the tank with the lowest health is bahsei tank before getting concrete evidence from who gets attacked
+		local lowestHealth = 1000000
+		for i=1,12 do
+			local unitTag = "group"..i
+			if (GetGroupMemberSelectedRole(unitTag) == LFG_ROLE_TANK) then
+				local _, max = GetUnitPower(unitTag, COMBAT_MECHANIC_FLAGS_HEALTH)
+				if max < lowestHealth then
+					omr.probTankUnitTag = unitTag
+				end
 			end
 		end
 	end
-
 end
+
+
+omr.probTankUnitTag = ""
+
+omr.oldvars = {
+	["oldConeId"] = nil,
+	["probTankUnitTag"] = "",
+}
 
 function omr.deactivateBahsei()
 	EVENT_MANAGER:UnregisterForEvent("OMR Bahsei Cone CW", EVENT_COMBAT_EVENT)
@@ -43,6 +66,14 @@ function omr.deactivateBahsei()
 	EVENT_MANAGER:UnregisterForEvent("OMR Bahsei LA Carve", EVENT_COMBAT_EVENT)
 	EVENT_MANAGER:UnregisterForEvent("OMR Bahsei LA Slice", EVENT_COMBAT_EVENT)
 	EVENT_MANAGER:UnregisterForEvent("OMR ID Identification", EVENT_EFFECT_CHANGED)
+
+	if not (omr.probTankUnitTag == "") then omr.oldvars.probTankUnitTag = omr.probTankUnitTag end
+	if not (omr.oldConeId == nil) then omr.oldvars.oldConeId = omr.oldConeId end
+	
+	
+	--d(omr.probTankUnitTag)
+	--d(omr.oldvars.probTankUnitTag)
+
 	omr.oldConeId = nil
 	omr.probTankUnitTag = ""
 	omr.idLookup = {}
