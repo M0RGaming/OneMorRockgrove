@@ -7,8 +7,7 @@ function omr.guide.createWriteup()
 	local panelData = {
 		type = "panel",
 		name = "|cEFEBBEOne M0R Rockgrove Helper - Mech Guide|r",
-		author = "|c0DC1CF@M0R_Gaming|r",
-		slashCommand = "/omrguide"
+		author = "|c0DC1CF@M0R_Gaming|r"
 	}
 
 	local optionsTable = {
@@ -55,6 +54,41 @@ function omr.guide.createWriteup()
 						"When it charges, it should be either roll dodged or blocked, and it should be relatively easy to kill. There is only one Haj "..
 						"Mota in the entire trial, and it spawns right after trash 1.1. There is also an achievement to keep the Haj Mota alive until "..
 						"the last trash pack before Oax, and then sacrifice it to a geyser."
+				},
+				{
+					type = "description",
+					title = "Havocrel Butcher",
+					text = "The Havocrel Butcher is a big red Havocrel who is holding a two handed weapon. This enemy only starts spawning after the "..
+						"first boss, at trash pack 2.3. The Butcher will do a mechanic where he stomps his foot on the ground causing everyone near him "..
+						"to become ignited. When someone is ignited they will take alot of damage, and the effect will continue until it ends, even if "..
+						"the Butcher dies."
+				},
+				{
+					type = "description",
+					title = "Havocrel Barbarian",
+					text = "Similar to the Havocrel Butcher, the Barbarian is a big red Havocrel who uses dual wield weapons. The enemy only starts "..
+						"spawning at the trash pack right before Bahsei. After a short duration, the Barbarian will randomly teleport to people in the "..
+						"group and attack them before teleporting to someone else and repeating. While this is happening, DPS should be block casting "..
+						"to avoid taking too much damage. This is similar to the mechanic that Lieutenant Njordal or the Torturers do in Kynes Aegis."
+				},
+
+				{
+					type = "description",
+					title = "Fire Behemoth",
+					text = "The Fire Behemoth is a giant humanoid flame atronach. These enemies are identical to the mini bosses that Bahsei spawns below "..
+						"50% health. Behemoths will start spawning after killing Bahsei, and have 2 mechanics that are important. Similar to the Havocrel "..
+						"Annihilators from Oax, the Behemoth will create a metor aoe when he lands his heavy attack. This needs to be blocked or walked "..
+						"out of, as it will stun you if you are standing inside of it. After the Behemoth reaches 0% health, it will create a large aoe "..
+						"and after a few seconds explode. Anyone within this aoe will take alot of damage so it should be stepped out of."
+				},
+				{
+					type = "description",
+					title = "Havocrel Torchcaster",
+					text = "The Havocrel Torchcaster is a large Havocrel wielding a staff. This enemy cannot be chained and will need to be outranged "..
+						"to move it to the desired locations. The Torchcaster starts spawning after killing Bahsei, and has one major mechanic. "..
+						"After a short duration, the Torchcaster will spawn a Prime Metor somewhere around the field, similar to the metors that "..
+						"Bahsei summons below 30%. If this prime metor isnt killed in 10 seconds, it will explode and deal massive amounts of "..
+						"damage to everyone around it. This add is usually focused first due to this."
 				},
 			},
 		},
@@ -111,10 +145,6 @@ function omr.guide.createWriteup()
 						"as it will ensure that the correct people get charges, and not someone standing with the mini."
 				},
 			},
-		},
-		{
-			type = "header",
-			name = "|cFFD700Oaxiltso|r",
 		},
 		{
 			type = "divider",

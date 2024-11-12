@@ -27,7 +27,7 @@ function omr.activateBahsei()
 
 	local current, max = GetUnitPower('boss1',COMBAT_MECHANIC_FLAGS_HEALTH)
 	if (current/max) < 0.95 then -- fight hasnt actually just started, instead the player just got pulled in or left portal
-		d("Loading old vars since it looks like its not a wipe.")
+		--d("Loading old vars since it looks like its not a wipe.")
 		omr.oldConeId = omr.oldvars.oldConeId
 		omr.probTankUnitTag = omr.oldvars.probTankUnitTag
 	else
@@ -170,13 +170,13 @@ function omr.onBahseiCone(_, result, _, abilityName, _, _, sourceName, _, target
 	-- Calc Group and Tank theta in respect to the center of bahsei's arena. 
 	local world, tx, ty, tz = GetUnitRawWorldPosition(omr.probTankUnitTag)
 	local tankTheta = math.atan2((tz-bz),(tx-bx))
-	--d("Tank Theta = ".. tankTheta)
+	--d("Tank ("..GetUnitDisplayName(omr.probTankUnitTag)..") Theta = ".. tankTheta)
 
 
 	local deltaTheta = tankTheta-groupTheta
 	deltaTheta = (deltaTheta + math.pi) % (2*math.pi) - math.pi -- normalize it
 
-	d("Delta Theta is "..deltaTheta)
+	--d("Delta Theta is "..deltaTheta)
 
 
 	-- based on the rotation which the tank is oriented relative to the group, identify which direction would be a good cone
