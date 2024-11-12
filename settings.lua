@@ -99,6 +99,21 @@ function omr.settings.createSettings()
 			setFunc = function(value) vars.bahseiInitialCCW = value end,
 			width = "half",
 		},
+		{
+			type = "header",
+			name = "|cFFD700Experimental|r",
+		},
+		{
+			type = "description",
+			text = "The following settings are Experimental and may or may not work/cause UI errors."
+		},
+		{
+			type = "checkbox",
+			name = "(Experimental) Bahsei Initial Cone Arrows",
+			tooltip = "Creates arrows on the ground directing you towards the quadrant you need to be in for first cone.",
+			getFunc = function() return vars.bahseiInitialGroundArrows end,
+			setFunc = function(value) vars.bahseiInitialGroundArrows = value end,
+		},
 	}
 
 

@@ -141,8 +141,10 @@ function omr.onBahseiCone(_, result, _, abilityName, _, _, sourceName, _, target
 		if omr.vars.initialConeIndicator then
 			if abilityId == 153517 then
 				omr.sendCSA("|c00FF00"..omr.vars.bahseiInitialCW.."|r", "|cB0B0B0(probably)|r", SOUNDS.BATTLEGROUND_NEARING_VICTORY)
+				if omr.vars.bahseiInitialGroundArrows then omr.createInitialGroundMarkers(omr.vars.bahseiInitialCW) end
 			else
 				omr.sendCSA("|cFF0000"..omr.vars.bahseiInitialCCW.."|r", "|cB0B0B0(probably)|r", SOUNDS.TELVAR_MULTIPLIERMAX)
+				if omr.vars.bahseiInitialGroundArrows then omr.createInitialGroundMarkers(omr.vars.bahseiInitialCCW) end
 			end
 		end
 		return
@@ -224,13 +226,52 @@ function omr.badCone()
 end
 
 
+omr.bahseiCornersLabelled = {
+	["Boring Corner"] = {103118, 42650, 96430},
+	["Portal"] = {103118, 42650, 102867},
+	["Entrance"] = {96677, 42650, 102867},
+	["Banner"] = {96677, 42650, 96430}
+}
 
 
 
+omr.bahseiInitialGroundMarkers = {}
 
+-- create spaced markers between player position and the corner specified
+function omr.createInitialGroundMarkers(corner)
+	local zone, startX, startY, startZ = GetUnitRawWorldPosition("player")
+	local cornerPosition = omr.bahseiCornersLabelled[corner]
+	if cornerPosition == nil then return end
+	local endX = cornerPosition[1]
+	local endY = cornerPosition[2]
+	local endZ = cornerPosition[3]
+	--SetPlayerWaypointByWorldLocation(endX,endY,endZ) -- to verify corners are the correct ones
+	local delZ = endZ-startZ
+	local delX = endX-startX
+	local distance = math.sqrt(delX^2+delZ^2)
 
+	local currentX = 0
+	local currentZ = 0
+	local currentY = endY-25
+	local out = ""
 
+	for r=0,distance,200 do
+		currentX = startX + (r*delX)/distance
+		currentZ = startZ + (r*delZ)/distance
+		local marker = OSI.CreatePositionIcon(currentX, currentY, currentZ, "OdySupportIcons/icons/squares/marker_lightblue.dds", 100)
+		omr.bahseiInitialGroundMarkers[#omr.bahseiInitialGroundMarkers+1] = marker
 
+	end
+	EVENT_MANAGER:RegisterForUpdate("OMR Initial Bahsei Directions", 5000, omr.destroyInitialGroundMarkers)
+end
+
+function omr.destroyInitialGroundMarkers()
+	EVENT_MANAGER:UnregisterForUpdate("OMR Initial Bahsei Directions")
+	for i,v in pairs(omr.bahseiInitialGroundMarkers) do
+		OSI.DiscardPositionIcon(v)
+	end
+	omr.bahseiInitialGroundMarkers = {}
+end
 
 
 -- the following isnt being used yet, it will eventually place markers around the arena and rotate based on how cone is rotating

@@ -1,5 +1,5 @@
 OneMorRockgrove = {}
-omr = OneMorRockgrove -- local var for easy access
+local omr = OneMorRockgrove -- local var for easy access
 omr.name = "OneMorRockgrove"
 omr.vars = {}
 
@@ -115,7 +115,8 @@ omr.settings.DefaultSettings = {
 	bahseiInitialCW = "Boring Corner",
 	bahseiInitialCCW = "Portal",
 	goodConePrediction = true,
-	initialConeIndicator = true,
+	initialConeIndicator = false,
+	bahseiInitialGroundArrows = false
 }
 
 
