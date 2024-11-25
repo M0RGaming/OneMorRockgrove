@@ -100,6 +100,13 @@ function omr.settings.createSettings()
 			width = "half",
 		},
 		{
+			type = "checkbox",
+			name = "Bahsei Initial Cone Arrows",
+			tooltip = "Creates arrows on the ground directing you towards the quadrant you need to be in for first cone.",
+			getFunc = function() return vars.bahseiInitialGroundArrows end,
+			setFunc = function(value) vars.bahseiInitialGroundArrows = value end,
+		},
+		{
 			type = "header",
 			name = "|cFFD700Experimental|r",
 		},
@@ -109,11 +116,38 @@ function omr.settings.createSettings()
 		},
 		{
 			type = "checkbox",
-			name = "(Experimental) Bahsei Initial Cone Arrows",
-			tooltip = "Creates arrows on the ground directing you towards the quadrant you need to be in for first cone.",
-			getFunc = function() return vars.bahseiInitialGroundArrows end,
-			setFunc = function(value) vars.bahseiInitialGroundArrows = value end,
+			name = "Display Group location when Beaming",
+			tooltip = "If this is enabled, a marker will be placed at the group's average position upstairs when you beam for portal.",
+			getFunc = function() return vars.bahseiPortalIcon end,
+			setFunc = function(value) vars.bahseiPortalIcon = value end,
 		},
+		{
+			type = "checkbox",
+			name = "Draw Safe Zones with Lines",
+			tooltip = "If this is enabled, the safe zone boundaries for oax will show up lines on the ground. [Show Oax Safe Zone Borders] must also be enabled.",
+			getFunc = function() return vars.breadcrumbsOaxLines end,
+			setFunc = function(value) vars.breadcrumbsOaxLines = value end,
+			disabled = function() if Breadcrumbs then return false else return true end end,
+			warning = "This feature requires Breadcrumbs to be installed."
+		},
+		{
+			type = "checkbox",
+			name = "Draw Bahsei Initial Cone Line",
+			tooltip = "If this is enabled, a line will be drawn to the initial bahsei cone location. [Bahsei Initial Cone Arrows] must also be enabled.",
+			getFunc = function() return vars.breadcrumbsBahseiInitialLine end,
+			setFunc = function(value) vars.breadcrumbsBahseiInitialLine = value end,
+			disabled = function() if Breadcrumbs then return false else return true end end,
+			warning = "This feature requires Breadcrumbs to be installed."
+		},
+		{
+			type = "checkbox",
+			name = "Draw Bahsei Group Location Line",
+			tooltip = "If this is enabled, a line will be drawn to where the group is standing while beaming. [Display Group location when Beaming] must also be enabled.",
+			getFunc = function() return vars.breadcrumbsBahseiPortalLine end,
+			setFunc = function(value) vars.breadcrumbsBahseiPortalLine = value end,
+			disabled = function() if Breadcrumbs then return false else return true end end,
+			warning = "This feature requires Breadcrumbs to be installed."
+		}
 	}
 
 

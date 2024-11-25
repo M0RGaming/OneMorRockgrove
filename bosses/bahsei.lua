@@ -10,6 +10,12 @@ function omr.activateBahsei()
 	EVENT_MANAGER:AddFilterForEvent("OMR Bahsei Cone CCW", EVENT_COMBAT_EVENT, REGISTER_FILTER_ABILITY_ID, 153518)
 	EVENT_MANAGER:AddFilterForEvent("OMR Bahsei Cone CCW", EVENT_COMBAT_EVENT, REGISTER_FILTER_COMBAT_RESULT, ACTION_RESULT_EFFECT_GAINED)
 
+	if omr.vars.bahseiPortalIcon then
+		EVENT_MANAGER:RegisterForEvent("OMR Bahsei Beam", EVENT_COMBAT_EVENT, omr.healedByBeam)
+		EVENT_MANAGER:AddFilterForEvent("OMR Bahsei Beam", EVENT_COMBAT_EVENT, REGISTER_FILTER_ABILITY_ID, 153627)
+		EVENT_MANAGER:AddFilterForEvent("OMR Bahsei Beam", EVENT_COMBAT_EVENT, REGISTER_FILTER_TARGET_COMBAT_UNIT_TYPE, COMBAT_UNIT_TYPE_PLAYER)
+	end
+
 	-- The rest is for bahsei cones so just exit if not enabled.
 	if not omr.vars.goodConePrediction then return end
 
@@ -66,6 +72,7 @@ function omr.deactivateBahsei()
 	EVENT_MANAGER:UnregisterForEvent("OMR Bahsei LA Carve", EVENT_COMBAT_EVENT)
 	EVENT_MANAGER:UnregisterForEvent("OMR Bahsei LA Slice", EVENT_COMBAT_EVENT)
 	EVENT_MANAGER:UnregisterForEvent("OMR ID Identification", EVENT_EFFECT_CHANGED)
+	EVENT_MANAGER:UnregisterForEvent("OMR Bahsei Beam", EVENT_COMBAT_EVENT)
 
 	if not (omr.probTankUnitTag == "") then omr.oldvars.probTankUnitTag = omr.probTankUnitTag end
 	if not (omr.oldConeId == nil) then omr.oldvars.oldConeId = omr.oldConeId end
@@ -262,6 +269,12 @@ function omr.createInitialGroundMarkers(corner)
 		omr.bahseiInitialGroundMarkers[#omr.bahseiInitialGroundMarkers+1] = marker
 
 	end
+
+	if omr.vars.breadcrumbsBahseiInitialLine then
+		Breadcrumbs.RefreshLines()
+		Breadcrumbs.AddLineToPool(startX, startY, startZ, endX, endY, endZ, {1,0,1})
+	end
+
 	EVENT_MANAGER:RegisterForUpdate("OMR Initial Bahsei Directions", 5000, omr.destroyInitialGroundMarkers)
 end
 
@@ -271,7 +284,96 @@ function omr.destroyInitialGroundMarkers()
 		OSI.DiscardPositionIcon(v)
 	end
 	omr.bahseiInitialGroundMarkers = {}
+	if Breadcrumbs then
+		Breadcrumbs.RefreshLines()
+	end
 end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+omr.lastHealTick = 0
+omr.downstairsMarker = {}
+function omr.healedByBeam()
+	local time = os.rawclock()
+	if time < omr.lastHealTick + 500 then return end
+	
+
+	local groupPositions = {}
+	for i=1, 12 do
+		local unitTag = "group"..i
+		if (GetGroupMemberSelectedRole(unitTag) == LFG_ROLE_DPS) then
+			local world, x, y, z = GetUnitRawWorldPosition(unitTag)
+			if world == 1263 then
+				groupPositions[#groupPositions+1] = {x,z}
+			end
+		end
+	end
+	local avgx, avgz = omr.distanceWeightedMean(groupPositions) -- calc xbar and zbar with dwm on dps locations. DWM should take care of outliers
+
+	local world, px, py, pz = GetUnitRawWorldPosition('player')
+	omr.downstairsMarker = OSI.CreatePositionIcon(avgx, py, avgz, "OdySupportIcons/icons/arrow.dds", 200)
+
+	if omr.vars.breadcrumbsBahseiPortalLine then
+		Breadcrumbs.RefreshLines()
+		Breadcrumbs.AddLineToPool(px, py, pz, avgx, py, avgz, {1,0,1})
+	end
+
+	-- create marker here
+
+	if omr.lastHealTick == 0 then
+		EVENT_MANAGER:RegisterForUpdate("OMR Bahsei Stop Beam", 1000, omr.revertHealByBeam)
+	end
+	omr.lastHealTick = time
+end
+
+
+function omr.revertHealByBeam()
+	local time = os.rawclock()
+	if time < omr.lastHealTick + 5000 then return end
+	OSI.DiscardPositionIcon(omr.downstairsMarker)
+	if Breadcrumbs then
+		Breadcrumbs.RefreshLines()
+	end
+
+	EVENT_MANAGER:UnregisterForUpdate("OMR Bahsei Stop Beam")
+	omr.lastHealTick = 0
+end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 -- the following isnt being used yet, it will eventually place markers around the arena and rotate based on how cone is rotating

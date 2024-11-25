@@ -43,9 +43,9 @@ local safePoly = {
 local safeEntranceLeftPoly = {
 	{90081,76844}, {90027,77513}, {90146,77961},
 	{90250,78353}, {90316,78674}, {90378,78945},
-	{90647,79089}, {90729,79381}, {91101,79579},
-	{91425,79726}, {91828,79626}, {92224,79852},
-	{92647,79746}, {93094,79689}, {93287,79379},
+	{90558,79167}, {90729,79381}, {91101,79579},
+	{91425,79726}, {91821,79778}, {92224,79852},
+	{92647,79746}, {93020,79595}, {93287,79379},
 	{93481,79206}, {93481,76844}
 }
 
@@ -108,12 +108,34 @@ omr.markersEntranceLeft = {}
 omr.markersExitLeft = {}
 
 function omr.createSafeBorders()
-	local y = 35727
-	for i,v in pairs(omr.safeZones.entranceLeft) do
-		omr.markersEntranceLeft[#omr.markersEntranceLeft+1] = OSI.CreatePositionIcon(v[1], y, v[2], "OdySupportIcons/icons/squares/marker_lightblue.dds", 50, {0,0.7,1})
+	local y = 35850 -- 35727 previously
+	local entranceLeft = omr.safeZones.entranceLeft
+	local exitLeft = omr.safeZones.exitLeft
+
+	if Breadcrumbs then
+		-- potentially fixes a bug where lines dont load
+		Breadcrumbs.RefreshLines()
 	end
-	for i,v in pairs(omr.safeZones.exitLeft) do
+	
+	for i,v in ipairs(entranceLeft) do
+		omr.markersEntranceLeft[#omr.markersEntranceLeft+1] = OSI.CreatePositionIcon(v[1], y, v[2], "OdySupportIcons/icons/squares/marker_lightblue.dds", 50, {0,0.7,1})
+		
+		if omr.vars.breadcrumbsOaxLines then
+			if i < #entranceLeft-1 then
+				local w = entranceLeft[i+1]
+				Breadcrumbs.AddLineToPool(v[1], y, v[2], w[1], y, w[2], {0,0.62,0.58})
+			end
+		end
+	end
+	for i,v in ipairs(exitLeft) do
 		omr.markersExitLeft[#omr.markersExitLeft+1] = OSI.CreatePositionIcon(v[1], y, v[2], "OdySupportIcons/icons/squares/marker_lightblue.dds", 50, {0,1,0})
+		
+		if omr.vars.breadcrumbsOaxLines then
+			if i < #exitLeft-1 then
+				local w = exitLeft[i+1]
+				Breadcrumbs.AddLineToPool(v[1], y, v[2], w[1], y, w[2], {0,1,0})
+			end
+		end
 	end
 end
 
@@ -126,6 +148,9 @@ function omr.destroySafeBorders()
 	end
 	omr.markersEntranceLeft = {}
 	omr.markersExitLeft = {}
+	if Breadcrumbs then
+		Breadcrumbs.RefreshLines()
+	end
 end
 
 

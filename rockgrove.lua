@@ -116,7 +116,11 @@ omr.settings.DefaultSettings = {
 	bahseiInitialCCW = "Portal",
 	goodConePrediction = true,
 	initialConeIndicator = false,
-	bahseiInitialGroundArrows = false
+	bahseiInitialGroundArrows = false,
+	breadcrumbsOaxLines = false,
+	breadcrumbsBahseiInitialLine = false,
+	breadcrumbsBahseiPortalLine = false,
+	bahseiPortalIcon = false
 }
 
 
@@ -145,5 +149,10 @@ function omr:Initialize()
 	EVENT_MANAGER:RegisterForEvent(omr.name .. "AlwaysActive", EVENT_PLAYER_ACTIVATED, omr.playerActivated)
 
 	omr.vars = ZO_SavedVars:NewAccountWide("OMRSettings", omr.varversion, nil, omr.settings.DefaultSettings)
+	if Breadcrumbs == nil then
+		omr.vars.breadcrumbsOaxLines = false
+		omr.vars.breadcrumbsBahseiInitialLine = false
+		omr.vars.breadcrumbsBahseiPortalLine = false
+	end
 	omr.settings.createSettings()
 end

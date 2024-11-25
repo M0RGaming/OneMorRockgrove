@@ -16,6 +16,10 @@ As this is my first trial specific addon, I have tried to optimize it so that no
 - There is also a setting to swap the behaviour so that the screen will tint if the player is inside of a safe zone, intended for kite healers to know when they enter a safe zone.
 - By default, this feature is disabled.
 
+
+### Experimental: Oax Safe Zone Line Borders [Requires Breadcrumbs]
+- If Breadcrumbs is installed, this feature will connect lines between each of the markers for the oax safe zones, making it easier to see.
+
 ## `Bahsei (Hardmode)`
 
 ### Good Cone Prediction
@@ -30,11 +34,19 @@ As this is my first trial specific addon, I have tried to optimize it so that no
 - This feature assumes that when the first cone spawns, it will spawn where the group is currently standing.
 - By default, this feature is disabled. The initial corners for CW and CCW cones should be configured to your group's playstyle before use.
 
-### [Experimental] Initial Cone Path Guide
+### Initial Cone Path Guide
 - After first cone spawns, this feature will create a line of markers on the ground leading you towards the corner specifed by the Initial Cone Movement feature above.
 - This path guide will not function if the feature above is not enabled, and if the initial CW and CCW positions are not properly configured then it will not function properly.
 - This feature is experimental, and may not work properly since I have not yet had time to rigorously test it.
 - By default, this feature is disabled.
+
+
+### Experimental: Initial Cone Movement Line [Requires Breadcrumbs]
+- If Breadcrumbs is installed, this feature will create a line between you and the corner you should go to for first cone.
+
+### Experimental: Group Location while Beaming
+- The group's position will be indicated with an icon while you are beaming.
+- There is an experimental option to use Breadcrumbs to also make a line that goes to the marker from where you are standing.
 
 ### `Coming Soon:`
 - Markers that rotate around the edges of Bahsei's arena to indicate cone direction
@@ -46,3 +58,5 @@ If you have any sugesstions of features or have found any bugs, please let me kn
 
 ### `Requirements:`
 - LibAddonMenu2, OdySupportIcons, CodesCombatAlerts
+### `Optional Requirements:`
+- Breadcrumbs [Needed for features that place lines]
