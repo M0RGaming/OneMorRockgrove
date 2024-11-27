@@ -40,11 +40,26 @@ function omr.settings.createSettings()
 			width = "half",
 		},
 		{
+			type = "description",
+			text = "The following settings will show the Oax safe zones, which are areas where people standing within them will not "..
+				"get poison. Only the people outside of the safe zones will get poison on them without considering any distances like previously "..
+				"believed. If there are not enough people outside of a safe zone, then a random person in the safe zone will get it."
+		},
+		{
 			type = "checkbox",
 			name = "Show Oax Safe Zone Borders",
 			tooltip = "If this is enabled, the safe zone boundaries for oax will show up little markers on the ground",
 			getFunc = function() return vars.showSafeBorders end,
 			setFunc = function(value) vars.showSafeBorders = value end,
+		},
+		{
+			type = "checkbox",
+			name = "Draw Safe Zones with Lines",
+			tooltip = "If this is enabled, the safe zone boundaries for oax will show up lines on the ground. [Show Oax Safe Zone Borders] must also be enabled.",
+			getFunc = function() return vars.breadcrumbsOaxLines end,
+			setFunc = function(value) vars.breadcrumbsOaxLines = value end,
+			disabled = function() if Breadcrumbs then return false else return true end end,
+			warning = "This feature requires Breadcrumbs to be installed."
 		},
 		{
 			type = "description",
@@ -74,6 +89,13 @@ function omr.settings.createSettings()
 			getFunc = function() return vars.goodConePrediction end,
 			setFunc = function(value) vars.goodConePrediction = value end,
 		},
+
+		{
+			type = "description",
+			text = "The following settings are relavent for the first cone that Bahsei spawns during hardmode. This should be configured "..
+			"depending on how your group is holding bahsei, and as such it is disabled by default."
+		},
+
 		{
 			type = "checkbox",
 			name = "Enable Bahsei Initial Cone Positioning",
@@ -107,12 +129,17 @@ function omr.settings.createSettings()
 			setFunc = function(value) vars.bahseiInitialGroundArrows = value end,
 		},
 		{
-			type = "header",
-			name = "|cFFD700Experimental|r",
+			type = "checkbox",
+			name = "Draw Bahsei Initial Cone Line",
+			tooltip = "If this is enabled, a line will be drawn to the initial bahsei cone location. [Bahsei Initial Cone Arrows] must also be enabled.",
+			getFunc = function() return vars.breadcrumbsBahseiInitialLine end,
+			setFunc = function(value) vars.breadcrumbsBahseiInitialLine = value end,
+			disabled = function() if Breadcrumbs then return false else return true end end,
+			warning = "This feature requires Breadcrumbs to be installed."
 		},
 		{
 			type = "description",
-			text = "The following settings are Experimental and may or may not work/cause UI errors."
+			text = "The following settings are relavent for people inside of portal."
 		},
 		{
 			type = "checkbox",
@@ -123,31 +150,30 @@ function omr.settings.createSettings()
 		},
 		{
 			type = "checkbox",
-			name = "Draw Safe Zones with Lines",
-			tooltip = "If this is enabled, the safe zone boundaries for oax will show up lines on the ground. [Show Oax Safe Zone Borders] must also be enabled.",
-			getFunc = function() return vars.breadcrumbsOaxLines end,
-			setFunc = function(value) vars.breadcrumbsOaxLines = value end,
-			disabled = function() if Breadcrumbs then return false else return true end end,
-			warning = "This feature requires Breadcrumbs to be installed."
-		},
-		{
-			type = "checkbox",
-			name = "Draw Bahsei Initial Cone Line",
-			tooltip = "If this is enabled, a line will be drawn to the initial bahsei cone location. [Bahsei Initial Cone Arrows] must also be enabled.",
-			getFunc = function() return vars.breadcrumbsBahseiInitialLine end,
-			setFunc = function(value) vars.breadcrumbsBahseiInitialLine = value end,
-			disabled = function() if Breadcrumbs then return false else return true end end,
-			warning = "This feature requires Breadcrumbs to be installed."
-		},
-		{
-			type = "checkbox",
 			name = "Draw Bahsei Group Location Line",
 			tooltip = "If this is enabled, a line will be drawn to where the group is standing while beaming. [Display Group location when Beaming] must also be enabled.",
 			getFunc = function() return vars.breadcrumbsBahseiPortalLine end,
 			setFunc = function(value) vars.breadcrumbsBahseiPortalLine = value end,
 			disabled = function() if Breadcrumbs then return false else return true end end,
 			warning = "This feature requires Breadcrumbs to be installed."
-		}
+		},
+		{
+			type = "header",
+			name = "|cFFD700Experimental|r",
+		},
+		{
+			type = "description",
+			text = "The following settings are Experimental and may or may not work/cause UI errors."
+		},
+		{
+			type = "checkbox",
+			name = "Draw Bahsei Portal Segments",
+			tooltip = "If this is enabled, when inside of Bahsei's Portal, the arena will be split into 3 labelled segment via lines on the ground.",
+			getFunc = function() return vars.bahseiPortalSegments end,
+			setFunc = function(value) vars.bahseiPortalSegments = value end,
+			disabled = function() if Breadcrumbs then return false else return true end end,
+			warning = "This feature requires Breadcrumbs to be installed."
+		},
 	}
 
 

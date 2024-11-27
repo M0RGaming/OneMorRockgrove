@@ -1,7 +1,7 @@
 ## Title: |cEFEBBEOne M0R Rockgrove Helper|r
 ## APIVersion: 101044
-## Version: 1.1.0
-## AddOnVersion: 110
+## Version: 1.2.0
+## AddOnVersion: 120
 ## Description: Yet another rockgrove helper!
 ## DependsOn: CombatAlerts LibAddonMenu-2.0 OdySupportIcons
 ## OptionalDependsOn: Breadcrumbs

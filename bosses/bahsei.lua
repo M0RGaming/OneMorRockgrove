@@ -16,6 +16,13 @@ function omr.activateBahsei()
 		EVENT_MANAGER:AddFilterForEvent("OMR Bahsei Beam", EVENT_COMBAT_EVENT, REGISTER_FILTER_TARGET_COMBAT_UNIT_TYPE, COMBAT_UNIT_TYPE_PLAYER)
 	end
 
+
+	if omr.vars.bahseiPortalSegments then
+		EVENT_MANAGER:RegisterForEvent("OMR Portal Breadcrumbs", EVENT_COMBAT_EVENT, omr.hitByPortal)
+		EVENT_MANAGER:AddFilterForEvent("OMR Portal Breadcrumbs", EVENT_COMBAT_EVENT, REGISTER_FILTER_ABILITY_ID, 153423)
+		EVENT_MANAGER:AddFilterForEvent("OMR Portal Breadcrumbs", EVENT_COMBAT_EVENT, REGISTER_FILTER_TARGET_COMBAT_UNIT_TYPE, COMBAT_UNIT_TYPE_PLAYER)
+	end
+
 	-- The rest is for bahsei cones so just exit if not enabled.
 	if not omr.vars.goodConePrediction then return end
 
@@ -73,6 +80,7 @@ function omr.deactivateBahsei()
 	EVENT_MANAGER:UnregisterForEvent("OMR Bahsei LA Slice", EVENT_COMBAT_EVENT)
 	EVENT_MANAGER:UnregisterForEvent("OMR ID Identification", EVENT_EFFECT_CHANGED)
 	EVENT_MANAGER:UnregisterForEvent("OMR Bahsei Beam", EVENT_COMBAT_EVENT)
+	EVENT_MANAGER:UnregisterForEvent("OMR Portal Breadcrumbs", EVENT_COMBAT_EVENT)
 
 	if not (omr.probTankUnitTag == "") then omr.oldvars.probTankUnitTag = omr.probTankUnitTag end
 	if not (omr.oldConeId == nil) then omr.oldvars.oldConeId = omr.oldConeId end
@@ -322,7 +330,6 @@ function omr.healedByBeam()
 	local avgx, avgz = omr.distanceWeightedMean(groupPositions) -- calc xbar and zbar with dwm on dps locations. DWM should take care of outliers
 
 	local world, px, py, pz = GetUnitRawWorldPosition('player')
-	omr.downstairsMarker = OSI.CreatePositionIcon(avgx, py, avgz, "OdySupportIcons/icons/arrow.dds", 200)
 
 	if omr.vars.breadcrumbsBahseiPortalLine then
 		Breadcrumbs.RefreshLines()
@@ -333,7 +340,10 @@ function omr.healedByBeam()
 
 	if omr.lastHealTick == 0 then
 		EVENT_MANAGER:RegisterForUpdate("OMR Bahsei Stop Beam", 1000, omr.revertHealByBeam)
+	else
+		OSI.DiscardPositionIcon(omr.downstairsMarker)
 	end
+	omr.downstairsMarker = OSI.CreatePositionIcon(avgx, py, avgz, "OdySupportIcons/icons/arrow.dds", 200)
 	omr.lastHealTick = time
 end
 
@@ -354,92 +364,68 @@ end
 
 
 
+-- first 12 create the numbers. last 15 create the lines (3 lines, 5 segments each)
+local portalLines = {
+	{99847, 43600, 102867, 99947, 43600, 102867, {0, 1, 0}},
+	{99847, 43475, 102867, 99947, 43475, 102867, {0, 1, 0}},
+	{99847, 43350, 102867, 99947, 43350, 102867, {0, 1, 0}},
+	{99847, 43600, 102867, 99847, 43350, 102867, {0, 1, 0}},
+	{99947, 43600, 96430, 99847, 43600, 96430, {0, 1, 0}},
+	{99947, 43600, 96430, 99947, 43475, 96430, {0, 1, 0}},
+	{99847, 43475, 96430, 99947, 43475, 96430, {0, 1, 0}},
+	{99847, 43475, 96430, 99847, 43350, 96430, {0, 1, 0}},
+	{99847, 43350, 96430, 99947, 43350, 96430, {0, 1, 0}},
+	{96636, 43350, 99576, 96636, 43600, 99576, {0, 1, 0}},
+	{96636, 43550, 99626, 96636, 43600, 99576, {0, 1, 0}},
+	{96636, 43350, 99526, 96636, 43350, 99626, {0, 1, 0}},
+	{99897, 42760, 99648, 99387, 42760, 100158, {0.5, 0, 1}},
+	{99387, 42760, 100158, 98877, 42760, 100669, {0.5, 0, 1}},
+	{98877, 42760, 100669, 98367, 42760, 101179, {0.5, 0, 1}},
+	{98367, 42760, 101179, 97857, 42760, 101689, {0.5, 0, 1}},
+	{97857, 42760, 101689, 97347, 42760, 102200, {0.5, 0, 1}},
+	{99897, 42760, 99648, 99391, 42760, 99138, {0.5, 0, 1}},
+	{99391, 42760, 99138, 98885, 42760, 98627, {0.5, 0, 1}},
+	{98885, 42760, 98627, 98379, 42760, 98117, {0.5, 0, 1}},
+	{98379, 42760, 98117, 97873, 42760, 97607, {0.5, 0, 1}},
+	{97873, 42760, 97607, 97368, 42760, 97097, {0.5, 0, 1}},
+	{99897, 42760, 99648, 100405, 42760, 99648, {0.5, 0, 1}},
+	{100405, 42760, 99648, 100913, 42760, 99648, {0.5, 0, 1}},
+	{100913, 42760, 99648, 101421, 42760, 99648, {0.5, 0, 1}},
+	{101421, 42760, 99648, 101929, 42760, 99648, {0.5, 0, 1}},
+	{101929, 42760, 99648, 102437, 42760, 99648, {0.5, 0, 1}},
+}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
--- the following isnt being used yet, it will eventually place markers around the arena and rotate based on how cone is rotating
-
-
-
-
--- {marker, offset}
-omr.markers = {}
-omr.markerStartingPosition = {0,0}
-omr.markerXScaling = 1
-omr.markerYScaling = 1
-
-
--- maybe make this also go below your feet?
-function omr.createBahseiPins()
-
-	local _, x, y, z = GetUnitRawWorldPosition( "player" )
-
-	local positions = {
-		{x-100,y,z-100},
-		{x,y,z-100},
-		{x+100,y,z-100},
-		{x+100,y,z},
-		{x+100,y,z+100},
-		{x,y,z+100},
-		{x-100,y,z+100},
-		{x-100,y,z},
-	}
-
-	for i,v in pairs(positions) do
-		omr.markers[#omr.markers+1] = {OSI.CreatePositionIcon(v[1], v[2], v[3], "OdySupportIcons/icons/squares/marker_lightblue.dds", 50),(i-1)*100}
-	end
-
-	omr.markerStartingPosition = {x-100, z-100}
-
-end
-
-
-function omr.rotateMarkers(distance)
-
-	for i,v in pairs(omr.markers) do
-		v[2] = v[2] + distance
-
-		if v[2] >= 800 then v[2] = v[2] - 800 end
-
-		local currentSide = zo_floor(v[2]/200)
-		local currentOffset = v[2]%200
-
-
-		if currentSide == 0 then
-			v[1].x = omr.markerStartingPosition[1] + currentOffset
-			v[1].z = omr.markerStartingPosition[2]
-		elseif currentSide == 1 then
-			v[1].x = omr.markerStartingPosition[1] + 200
-			v[1].z = omr.markerStartingPosition[2] + currentOffset
-		elseif currentSide == 2 then
-			v[1].x = (omr.markerStartingPosition[1] + 200) - currentOffset
-			v[1].z = omr.markerStartingPosition[2] + 200
-		elseif currentSide == 3 then
-			v[1].z = (omr.markerStartingPosition[2] + 200) - currentOffset
-			v[1].x = omr.markerStartingPosition[1]
+omr.lastMarrowTick = 0
+function omr.hitByPortal()
+	local time = os.rawclock()
+	if omr.lastMarrowTick == 0 then
+		-- create downstairs markers
+		Breadcrumbs.RefreshLines()
+		for i,v in pairs(portalLines) do
+			Breadcrumbs.AddLineToPool(unpack(v))
 		end
-
 	end
+	EVENT_MANAGER:RegisterForUpdate("OMR Bahsei Disable Portal Breadcrumbs", 1000, omr.revertHitByPortal)
+	omr.lastMarrowTick = time
 end
 
---SLASH_COMMANDS['/setup'] = omr.createBahseiPins
---SLASH_COMMANDS['/move'] = omr.rotateMarkers
+function omr.revertHitByPortal()
+	local time = os.rawclock()
+	if time < omr.lastMarrowTick + 5000 then return end
+	Breadcrumbs.RefreshLines()
+
+	EVENT_MANAGER:UnregisterForUpdate("OMR Bahsei Disable Portal Breadcrumbs")
+	omr.lastMarrowTick = 0
+end
+
+--153423
+--EVENT_MANAGER:RegisterForEvent("OMR Portal Breadcrumbs", EVENT_COMBAT_EVENT, omr.healedByBeam)
+--EVENT_MANAGER:AddFilterForEvent("OMR Bahsei Beam", EVENT_COMBAT_EVENT, REGISTER_FILTER_ABILITY_ID, 153423)
+--EVENT_MANAGER:AddFilterForEvent("OMR Bahsei Beam", EVENT_COMBAT_EVENT, REGISTER_FILTER_TARGET_COMBAT_UNIT_TYPE, COMBAT_UNIT_TYPE_PLAYER)
+
+
+
+
+
+
+

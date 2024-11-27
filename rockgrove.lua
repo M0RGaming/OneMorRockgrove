@@ -117,10 +117,11 @@ omr.settings.DefaultSettings = {
 	goodConePrediction = true,
 	initialConeIndicator = false,
 	bahseiInitialGroundArrows = false,
-	breadcrumbsOaxLines = false,
-	breadcrumbsBahseiInitialLine = false,
-	breadcrumbsBahseiPortalLine = false,
-	bahseiPortalIcon = false
+	breadcrumbsOaxLines = true,
+	breadcrumbsBahseiInitialLine = true,
+	breadcrumbsBahseiPortalLine = true,
+	bahseiPortalIcon = true,
+	bahseiPortalSegments = true
 }
 
 
@@ -153,6 +154,7 @@ function omr:Initialize()
 		omr.vars.breadcrumbsOaxLines = false
 		omr.vars.breadcrumbsBahseiInitialLine = false
 		omr.vars.breadcrumbsBahseiPortalLine = false
+		omr.vars.bahseiPortalSegments = false
 	end
 	omr.settings.createSettings()
 end

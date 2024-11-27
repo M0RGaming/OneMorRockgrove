@@ -17,7 +17,7 @@ As this is my first trial specific addon, I have tried to optimize it so that no
 - By default, this feature is disabled.
 
 
-### Experimental: Oax Safe Zone Line Borders [Requires Breadcrumbs]
+### Oax Safe Zone Line Borders [Requires Breadcrumbs]
 - If Breadcrumbs is installed, this feature will connect lines between each of the markers for the oax safe zones, making it easier to see.
 
 ## `Bahsei (Hardmode)`
@@ -40,13 +40,20 @@ As this is my first trial specific addon, I have tried to optimize it so that no
 - This feature is experimental, and may not work properly since I have not yet had time to rigorously test it.
 - By default, this feature is disabled.
 
-
-### Experimental: Initial Cone Movement Line [Requires Breadcrumbs]
+### Initial Cone Movement Line [Requires Breadcrumbs]
 - If Breadcrumbs is installed, this feature will create a line between you and the corner you should go to for first cone.
 
-### Experimental: Group Location while Beaming
+### Group Location while Beaming
 - The group's position will be indicated with an icon while you are beaming.
 - There is an experimental option to use Breadcrumbs to also make a line that goes to the marker from where you are standing.
+
+
+### Experimental: Bahsei Portal Segments [Requires Breadcrumbs]
+- Will display the split portal area in bahsei portal with lines.
+- Labels the sections 1 as entrance, 2 as boring corner, and 3 as portal.
+
+
+
 
 ### `Coming Soon:`
 - Markers that rotate around the edges of Bahsei's arena to indicate cone direction
