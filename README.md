@@ -6,8 +6,8 @@ As this is my first trial specific addon, I have tried to optimize it so that no
 ## `Oax`
 
 ### Oax Safe Zone Borders
-- The addon is able to display the outline of the Oax poison safe zone for the left 2 pools.
-- Oax's Poison selection behaviour was experiementally derived by @zbzszzzt123 to select 2 random people outside of a safe zone to gain poison. If there are not enough people outside of a safe zone, then oax will choose a random person inside the safe zone. Zeebs experimentally mapped out the exit left safe zone in elms markers. This addon uses their work in addition to my own experimental testing to derive the entrance left safe zone with @Chrissy-T, @jowoll, @Jess182, and @PyroFD3S.
+- The addon is able to display the outline of the Oax poison safe zone for both the exit pools, and the entrance left pool.
+- Oax's Poison selection behaviour was experiementally derived by @zbzszzzt123 to select 2 random people outside of a safe zone to gain poison. If there are not enough people outside of a safe zone, then oax will choose a random person inside the safe zone. Zeebs experimentally mapped out the exit left safe zone in elms markers. This addon uses their work in addition to my own experimental testing to derive the entrance left safe zone with @Chrissy-T, @jowoll, @Jess182, and @PyroFD3S. In addition, I have mapped out the exit right oax safe zone with @livelifesimply, @RinBC, @Jess182, @Sandman2055, @Trent-Alexios. 
 - This is normally only visible in combat, but there are buttons in the settings menu to show and hide the borders regardless of if the player is in combat. In addition, the player can use /showoaxborders or /hideoaxborders to show and hide the borders regardless of combat state.
 - By default, this feature is enabled.
 

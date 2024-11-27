@@ -49,17 +49,31 @@ local safeEntranceLeftPoly = {
 	{93481,79206}, {93481,76844}
 }
 
+
+-- Points recorded via a testing run with me, @livelifesimply, @RinBC, @Jess182, @Sandman2055, @Trent-Alexios
+-- 58 min oax pulls are draining, especially when you accidentally delete half the markers.
+local safeExitRightPoly = {
+	{86732,80207}, {87066,80213}, {87380,80139},
+	{87585,80122}, {87784,80211}, {88003,80216},
+	{88212,80372}, {88386,80377}, {88652,80510},
+	{88784,80738}, {88947,80843}, {89155,81030},
+	{89292,81244}, {89318,81455}, {89398,81668},
+	{89523,81878}, {89508,82175}, {89525,82439},
+	{89494,82718}, {89369,83000}, {89187,83244},
+	{89115,83448}, {86732,83448}
+}
+
 omr.safeZones = {}
 omr.safeZones.entranceLeft = safeEntranceLeftPoly
 omr.safeZones.exitLeft = safePoly
-
+omr.safeZones.exitRight = safeExitRightPoly
 
 
 
 
 function omr.isUnitInSafeZone(unitTag) 
 	local world, px, py, pz = GetUnitWorldPosition(unitTag)
-	return omr.insidePolygon(safePoly,{px,pz}) or omr.insidePolygon(safeEntranceLeftPoly,{px,pz})
+	return omr.insidePolygon(safePoly,{px,pz}) or omr.insidePolygon(safeEntranceLeftPoly,{px,pz}) or omr.insidePolygon(safeExitRightPoly,{px,pz})
 end
 
 
@@ -106,11 +120,13 @@ end
 
 omr.markersEntranceLeft = {}
 omr.markersExitLeft = {}
+omr.markersExitRight = {}
 
 function omr.createSafeBorders()
 	local y = 35850 -- 35727 previously
 	local entranceLeft = omr.safeZones.entranceLeft
 	local exitLeft = omr.safeZones.exitLeft
+	local exitRight = omr.safeZones.exitRight
 
 	if Breadcrumbs then
 		-- potentially fixes a bug where lines dont load
@@ -137,6 +153,16 @@ function omr.createSafeBorders()
 			end
 		end
 	end
+	for i,v in ipairs(exitRight) do
+		omr.markersExitRight[#omr.markersExitRight+1] = OSI.CreatePositionIcon(v[1], y, v[2], "OdySupportIcons/icons/squares/marker_lightblue.dds", 50, {1,0.4,1})
+		
+		if omr.vars.breadcrumbsOaxLines then
+			if i < #exitRight-1 then
+				local w = exitRight[i+1]
+				Breadcrumbs.AddLineToPool(v[1], y, v[2], w[1], y, w[2], {0,0.5,0.86})
+			end
+		end
+	end
 end
 
 function omr.destroySafeBorders()
@@ -146,8 +172,13 @@ function omr.destroySafeBorders()
 	for i,v in pairs(omr.markersExitLeft) do
 		OSI.DiscardPositionIcon(v)
 	end
+
+	for i,v in pairs(omr.markersExitRight) do
+		OSI.DiscardPositionIcon(v)
+	end
 	omr.markersEntranceLeft = {}
 	omr.markersExitLeft = {}
+	omr.markersExitRight = {}
 	if Breadcrumbs then
 		Breadcrumbs.RefreshLines()
 	end
