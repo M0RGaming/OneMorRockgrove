@@ -273,14 +273,23 @@ function omr.createInitialGroundMarkers(corner)
 	for r=0,distance,200 do
 		currentX = startX + (r*delX)/distance
 		currentZ = startZ + (r*delZ)/distance
-		local marker = OSI.CreatePositionIcon(currentX, currentY, currentZ, "OdySupportIcons/icons/squares/marker_lightblue.dds", 100)
+		local p = {
+			pos = {currentX,currentY,currentZ},
+			color = 0xff00ff, -- /script d(string.format("%x", LibCodesCommonCode.RGBAToInt32(0,1,0,1)))
+			texture = "world-pointer-down",
+			disableDepthBuffers = true,
+			playerFacing = true,
+			size = 30,
+		}
+		local marker = omr.worldIcons:PlaceTexture(p)
+		--local marker = OSI.CreatePositionIcon(currentX, currentY, currentZ, "OdySupportIcons/icons/squares/marker_lightblue.dds", 100)
 		omr.bahseiInitialGroundMarkers[#omr.bahseiInitialGroundMarkers+1] = marker
 
 	end
 
 	if omr.vars.breadcrumbsBahseiInitialLine then
 		Breadcrumbs.RefreshLines()
-		Breadcrumbs.AddLineToPool(startX, startY, startZ, endX, endY, endZ, {1,0,1})
+		Breadcrumbs.AddLineToPool(startX, startY+5, startZ, endX, startY+5, endZ, {1,0,1})
 	end
 
 	EVENT_MANAGER:RegisterForUpdate("OMR Initial Bahsei Directions", 5000, omr.destroyInitialGroundMarkers)
@@ -289,7 +298,8 @@ end
 function omr.destroyInitialGroundMarkers()
 	EVENT_MANAGER:UnregisterForUpdate("OMR Initial Bahsei Directions")
 	for i,v in pairs(omr.bahseiInitialGroundMarkers) do
-		OSI.DiscardPositionIcon(v)
+		omr.worldIcons:RemoveElement(v)
+		--OSI.DiscardPositionIcon(v)
 	end
 	omr.bahseiInitialGroundMarkers = {}
 	if Breadcrumbs then
@@ -341,9 +351,21 @@ function omr.healedByBeam()
 	if omr.lastHealTick == 0 then
 		EVENT_MANAGER:RegisterForUpdate("OMR Bahsei Stop Beam", 1000, omr.revertHealByBeam)
 	else
-		OSI.DiscardPositionIcon(omr.downstairsMarker)
+		--OSI.DiscardPositionIcon(omr.downstairsMarker)
+		omr.worldIcons:RemoveElement(omr.downstairsMarker)
 	end
-	omr.downstairsMarker = OSI.CreatePositionIcon(avgx, py, avgz, "OdySupportIcons/icons/arrow.dds", 200)
+
+	local p = {
+		pos = {avgx,py,avgz},
+		color = 0xffffffff,
+		texture = "world-pointer-down",
+		disableDepthBuffers = true,
+		playerFacing = true,
+		size = 200,
+		elevation = 100,
+	}
+	omr.downstairsMarker = omr.worldIcons:PlaceTexture(p)
+	--omr.downstairsMarker = OSI.CreatePositionIcon(avgx, py, avgz, "OdySupportIcons/icons/arrow.dds", 200)
 	omr.lastHealTick = time
 end
 
@@ -351,7 +373,8 @@ end
 function omr.revertHealByBeam()
 	local time = os.rawclock()
 	if time < omr.lastHealTick + 5000 then return end
-	OSI.DiscardPositionIcon(omr.downstairsMarker)
+	--OSI.DiscardPositionIcon(omr.downstairsMarker)
+	omr.worldIcons:RemoveElement(omr.downstairsMarker)
 	if Breadcrumbs then
 		Breadcrumbs.RefreshLines()
 	end

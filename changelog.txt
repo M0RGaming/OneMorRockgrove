@@ -1,3 +1,8 @@
+Version 1.3.0
+----------
+Moved to LCA instead of Odys
+Added a prerendered Oax Poisons iamge
+
 Version 1.2.1
 ----------
 Mapped out the exit right oax safe zone with @livelifesimply, @RinBC, @Jess182, @Sandman2055, @Trent-Alexios. 

@@ -54,10 +54,20 @@ function omr.sendCSA(message, secondMessage, sound)
 end
 
 
-function omr.border(id, duration, colour, enable)
-	if enable then
-		CombatAlerts.ScreenBorderEnable(colour, duration, id)
-	else
-		CombatAlerts.ScreenBorderDisable(id)
+do
+	local Border -- yoinked from Combat Alerts
+	local function GetBorder()
+		if (not Border) then
+			Border = LibCombatAlerts.ScreenBorder:New()
+		end
+		return Border
+	end
+
+	function omr.border(id, duration, colour, enable)
+		if enable then
+			GetBorder():Enable(colour, duration, id)
+		else
+			GetBorder():Disable(id)
+		end
 	end
 end

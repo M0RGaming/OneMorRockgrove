@@ -132,9 +132,22 @@ function omr.createSafeBorders()
 		-- potentially fixes a bug where lines dont load
 		Breadcrumbs.RefreshLines()
 	end
+
+
+	
+
 	
 	for i,v in ipairs(entranceLeft) do
-		omr.markersEntranceLeft[#omr.markersEntranceLeft+1] = OSI.CreatePositionIcon(v[1], y, v[2], "OdySupportIcons/icons/squares/marker_lightblue.dds", 50, {0,0.7,1})
+		local p = {
+			pos = {v[1],y,v[2]},
+			color = 0xb2ffff, -- /script d(string.format("%x", LibCodesCommonCode.RGBAToInt32(0,0.7,1,1)))
+			texture = "world-pointer-down",
+			disableDepthBuffers = true,
+			playerFacing = true,
+			size = 30,
+		}
+		omr.markersEntranceLeft[#omr.markersEntranceLeft+1] = omr.worldIcons:PlaceTexture(p)
+		--omr.markersEntranceLeft[#omr.markersEntranceLeft+1] = OSI.CreatePositionIcon(v[1], y, v[2], "OdySupportIcons/icons/squares/marker_lightblue.dds", 50, {0,0.7,1})
 		
 		if omr.vars.breadcrumbsOaxLines then
 			if i < #entranceLeft-1 then
@@ -144,7 +157,18 @@ function omr.createSafeBorders()
 		end
 	end
 	for i,v in ipairs(exitLeft) do
-		omr.markersExitLeft[#omr.markersExitLeft+1] = OSI.CreatePositionIcon(v[1], y, v[2], "OdySupportIcons/icons/squares/marker_lightblue.dds", 50, {0,1,0})
+
+		local p = {
+			pos = {v[1],y,v[2]},
+			color = 0xff00ff, -- /script d(string.format("%x", LibCodesCommonCode.RGBAToInt32(0,1,0,1)))
+			texture = "world-pointer-down",
+			disableDepthBuffers = true,
+			playerFacing = true,
+			size = 30,
+		}
+		omr.markersExitLeft[#omr.markersExitLeft+1] = omr.worldIcons:PlaceTexture(p)
+
+		--omr.markersExitLeft[#omr.markersExitLeft+1] = OSI.CreatePositionIcon(v[1], y, v[2], "OdySupportIcons/icons/squares/marker_lightblue.dds", 50, {0,1,0})
 		
 		if omr.vars.breadcrumbsOaxLines then
 			if i < #exitLeft-1 then
@@ -154,33 +178,65 @@ function omr.createSafeBorders()
 		end
 	end
 	for i,v in ipairs(exitRight) do
-		omr.markersExitRight[#omr.markersExitRight+1] = OSI.CreatePositionIcon(v[1], y, v[2], "OdySupportIcons/icons/squares/marker_lightblue.dds", 50, {1,0.4,1})
+
+		local p = {
+			pos = {v[1],y,v[2]},
+			color = 0xff66ffff, -- /script d(string.format("%x", LibCodesCommonCode.RGBAToInt32(1,0.4,1,1)))
+			texture = "world-pointer-down",
+			disableDepthBuffers = true,
+			playerFacing = true,
+			size = 30,
+		}
+		omr.markersExitRight[#omr.markersExitRight+1] = omr.worldIcons:PlaceTexture(p)
+
+		--omr.markersExitRight[#omr.markersExitRight+1] = OSI.CreatePositionIcon(v[1], y, v[2], "OdySupportIcons/icons/squares/marker_lightblue.dds", 50, {1,0.4,1})
 		
+		if omr.customLines then
+			omr.worldIcons:RemoveElement(omr.customLines)
+			omr.customLines = nil
+		end
+
 		if omr.vars.breadcrumbsOaxLines then
 			if i < #exitRight-1 then
 				local w = exitRight[i+1]
 				Breadcrumbs.AddLineToPool(v[1], y, v[2], w[1], y, w[2], {0,0.5,0.86})
 			end
+		elseif omr.vars.customOaxLines then
+			local p = {
+				pos = {90108, y, 80146},
+				texture = "OneMorRockgrove/OaxPosions.dds",
+				disableDepthBuffers = false, -- maybe
+				playerFacing = false,
+				size = {6752, 6604},
+			}
+			omr.customLines = omr.worldIcons:PlaceTexture(p)
 		end
 	end
 end
 
 function omr.destroySafeBorders()
 	for i,v in pairs(omr.markersEntranceLeft) do
-		OSI.DiscardPositionIcon(v)
+		--OSI.DiscardPositionIcon(v)
+		omr.worldIcons:RemoveElement(v)
 	end
 	for i,v in pairs(omr.markersExitLeft) do
-		OSI.DiscardPositionIcon(v)
+		--OSI.DiscardPositionIcon(v)
+		omr.worldIcons:RemoveElement(v)
 	end
 
 	for i,v in pairs(omr.markersExitRight) do
-		OSI.DiscardPositionIcon(v)
+		--OSI.DiscardPositionIcon(v)
+		omr.worldIcons:RemoveElement(v)
 	end
 	omr.markersEntranceLeft = {}
 	omr.markersExitLeft = {}
 	omr.markersExitRight = {}
 	if Breadcrumbs then
 		Breadcrumbs.RefreshLines()
+	end
+	if omr.customLines then
+		omr.worldIcons:RemoveElement(omr.customLines)
+		omr.customLines = nil
 	end
 end
 

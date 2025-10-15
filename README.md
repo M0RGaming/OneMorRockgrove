@@ -17,8 +17,10 @@ As this is my first trial specific addon, I have tried to optimize it so that no
 - By default, this feature is disabled.
 
 
-### Oax Safe Zone Line Borders [Requires Breadcrumbs]
-- If Breadcrumbs is installed, this feature will connect lines between each of the markers for the oax safe zones, making it easier to see.
+### Oax Safe Zone Line Borders
+- This feature will connect lines between each of the markers for the oax safe zones, making it easier to see. There are 2 options for this feature, one using a prerendered image, and one using proper coordinates via Breadcrumbs
+- The prerendered image may be more preformance efficient, but will use up more memory and potentially have more bugs/desync than the Breadcrumbs option
+- If Breadcrumbs is installed, the addon will draw the lines directly in the field to ensure that the points are accurate. This will use up less memory and be more accurate, but require the addon Breadcrumbs to be installed and use a bit more resources.
 
 ## `Bahsei (Hardmode)`
 
@@ -64,6 +66,6 @@ As this is my first trial specific addon, I have tried to optimize it so that no
 If you have any sugesstions of features or have found any bugs, please let me know either in the comments or via discord: @m0r
 
 ### `Requirements:`
-- LibAddonMenu2, OdySupportIcons, CodesCombatAlerts
+- LibAddonMenu2, LibCombatAlerts (included in Codes Combat Alerts)
 ### `Optional Requirements:`
 - Breadcrumbs [Needed for features that place lines]

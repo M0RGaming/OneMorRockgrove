@@ -121,7 +121,8 @@ omr.settings.DefaultSettings = {
 	breadcrumbsBahseiInitialLine = true,
 	breadcrumbsBahseiPortalLine = true,
 	bahseiPortalIcon = true,
-	bahseiPortalSegments = true
+	bahseiPortalSegments = true,
+	customOaxLines = false,
 }
 
 
@@ -148,6 +149,8 @@ EVENT_MANAGER:RegisterForEvent(omr.name, EVENT_ADD_ON_LOADED, omr.OnAddOnLoaded)
 function omr:Initialize()
 	EVENT_MANAGER:UnregisterForEvent(omr.name, EVENT_ADD_ON_LOADED)
 	EVENT_MANAGER:RegisterForEvent(omr.name .. "AlwaysActive", EVENT_PLAYER_ACTIVATED, omr.playerActivated)
+
+	omr.worldIcons = LibCombatAlerts.WorldDrawing:New()
 
 	omr.vars = ZO_SavedVars:NewAccountWide("OMRSettings", omr.varversion, nil, omr.settings.DefaultSettings)
 	if Breadcrumbs == nil then
