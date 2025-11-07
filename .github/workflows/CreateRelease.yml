@@ -15,7 +15,7 @@ jobs:
           path: 'OneMorRockgrove'
 
       - name: Zip release
-        run: 7z a OneMorRockgrove.zip * -xr!*.git*
+        run: 7z a OneMorRockgrove.zip * -xr!*.git* -x!changelog.txt -x!README.md
 
 
       - name: Release
