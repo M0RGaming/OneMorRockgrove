@@ -122,7 +122,7 @@ omr.settings.DefaultSettings = {
 	breadcrumbsBahseiPortalLine = true,
 	bahseiPortalIcon = true,
 	bahseiPortalSegments = true,
-	customOaxLines = false,
+	customOaxLines = true,
 }
 
 
@@ -153,11 +153,5 @@ function omr:Initialize()
 	omr.worldIcons = LibCombatAlerts.WorldDrawing:New()
 
 	omr.vars = ZO_SavedVars:NewAccountWide("OMRSettings", omr.varversion, nil, omr.settings.DefaultSettings)
-	if Breadcrumbs == nil then
-		omr.vars.breadcrumbsOaxLines = false
-		omr.vars.breadcrumbsBahseiInitialLine = false
-		omr.vars.breadcrumbsBahseiPortalLine = false
-		omr.vars.bahseiPortalSegments = false
-	end
 	omr.settings.createSettings()
 end

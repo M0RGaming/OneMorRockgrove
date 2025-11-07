@@ -56,19 +56,19 @@ function omr.settings.createSettings()
 		{
 			type = "checkbox",
 			name = "Draw Safe Zones with Lines",
-			tooltip = "If this is enabled, the safe zone boundaries for oax will show up lines on the ground, in a pre-rendered image. [Show Oax Safe Zone Borders] must also be enabled.",
+			tooltip = "If this is enabled, the safe zone boundaries for oax will show up lines on the ground, in a pre-rendered image." ..
+				"\n\n|cFF0000This feature will use up about 1mb of ram.|r\nThe 'draw with breadcrumbs' feature will take priority over this.",
 			getFunc = function() return vars.customOaxLines end,
 			setFunc = function(value) vars.customOaxLines = value end,
-			warning = "This feature will use up about 1mb of ram. The 'draw with breadcrumbs' feature will take priority over this."
 		},
 		{
 			type = "checkbox",
 			name = "Draw Safe Zones with Breadcrumbs",
-			tooltip = "If this is enabled, the safe zone boundaries for oax will show up lines on the ground. [Show Oax Safe Zone Borders] must also be enabled.",
+			tooltip = "If this is enabled, the safe zone boundaries for oax will show up lines on the ground."..
+				"\n\nThis feature requires Breadcrumbs to be installed. Enabling this will take priority over 'draw with lines'.",
 			getFunc = function() return vars.breadcrumbsOaxLines end,
 			setFunc = function(value) vars.breadcrumbsOaxLines = value end,
 			disabled = function() if Breadcrumbs then return false else return true end end,
-			warning = "This feature requires Breadcrumbs to be installed. Enabling this will take priority over 'draw with lines'."
 		},
 		{
 			type = "description",
@@ -79,7 +79,7 @@ function omr.settings.createSettings()
 			type = "button",
 			name = "Display Oax Borders",
 			width = "half",
-			func = function() omr.createSafeBorders() end,
+			func = function() omr.EnableSafeZones() end,
 		},
 		{
 			type = "button",

@@ -7,9 +7,7 @@ function omr.activateOax()
 	if omr.vars.enableRedIndicator then
 		omr.EnableSafeIndicator()
 	end
-	if omr.vars.showSafeBorders then
-		omr.createSafeBorders()
-	end
+	omr.EnableSafeZones()
 end
 
 function omr.deactivateOax()
@@ -116,6 +114,17 @@ end
 
 
 
+function omr.EnableSafeZones()
+	if omr.vars.showSafeBorders then
+		omr.createSafeBorders()
+	end
+	if omr.vars.breadcrumbsOaxLines and Breadcrumbs then
+		omr.createOaxBreadcrumbsLines()
+	elseif omr.vars.customOaxLines then
+		omr.createOaxCustomLines()
+	end
+end
+
 
 
 omr.markersEntranceLeft = {}
@@ -128,14 +137,6 @@ function omr.createSafeBorders()
 	local exitLeft = omr.safeZones.exitLeft
 	local exitRight = omr.safeZones.exitRight
 
-	if Breadcrumbs then
-		-- potentially fixes a bug where lines dont load
-		Breadcrumbs.RefreshLines()
-	end
-
-
-	
-
 	
 	for i,v in ipairs(entranceLeft) do
 		local p = {
@@ -147,17 +148,8 @@ function omr.createSafeBorders()
 			size = 30,
 		}
 		omr.markersEntranceLeft[#omr.markersEntranceLeft+1] = omr.worldIcons:PlaceTexture(p)
-		--omr.markersEntranceLeft[#omr.markersEntranceLeft+1] = OSI.CreatePositionIcon(v[1], y, v[2], "OdySupportIcons/icons/squares/marker_lightblue.dds", 50, {0,0.7,1})
-		
-		if omr.vars.breadcrumbsOaxLines then
-			if i < #entranceLeft-1 then
-				local w = entranceLeft[i+1]
-				Breadcrumbs.AddLineToPool(v[1], y, v[2], w[1], y, w[2], {0,0.62,0.58})
-			end
-		end
 	end
 	for i,v in ipairs(exitLeft) do
-
 		local p = {
 			pos = {v[1],y,v[2]},
 			color = 0xff00ff, -- /script d(string.format("%x", LibCodesCommonCode.RGBAToInt32(0,1,0,1)))
@@ -167,18 +159,8 @@ function omr.createSafeBorders()
 			size = 30,
 		}
 		omr.markersExitLeft[#omr.markersExitLeft+1] = omr.worldIcons:PlaceTexture(p)
-
-		--omr.markersExitLeft[#omr.markersExitLeft+1] = OSI.CreatePositionIcon(v[1], y, v[2], "OdySupportIcons/icons/squares/marker_lightblue.dds", 50, {0,1,0})
-		
-		if omr.vars.breadcrumbsOaxLines then
-			if i < #exitLeft-1 then
-				local w = exitLeft[i+1]
-				Breadcrumbs.AddLineToPool(v[1], y, v[2], w[1], y, w[2], {0,1,0})
-			end
-		end
 	end
 	for i,v in ipairs(exitRight) do
-
 		local p = {
 			pos = {v[1],y,v[2]},
 			color = 0xff66ffff, -- /script d(string.format("%x", LibCodesCommonCode.RGBAToInt32(1,0.4,1,1)))
@@ -188,44 +170,76 @@ function omr.createSafeBorders()
 			size = 30,
 		}
 		omr.markersExitRight[#omr.markersExitRight+1] = omr.worldIcons:PlaceTexture(p)
+	end
+end
 
-		--omr.markersExitRight[#omr.markersExitRight+1] = OSI.CreatePositionIcon(v[1], y, v[2], "OdySupportIcons/icons/squares/marker_lightblue.dds", 50, {1,0.4,1})
-		
-		if omr.customLines then
-			omr.worldIcons:RemoveElement(omr.customLines)
-			omr.customLines = nil
+
+function omr.createOaxCustomLines()
+	local y = 35850 -- 35727 previously
+	local entranceLeft = omr.safeZones.entranceLeft
+	local exitLeft = omr.safeZones.exitLeft
+	local exitRight = omr.safeZones.exitRight
+
+	if omr.customLines then
+		omr.worldIcons:RemoveElement(omr.customLines)
+		omr.customLines = nil
+	end
+
+	if omr.vars.customOaxLines then
+		local p = {
+			pos = {90108, y, 80146},
+			texture = "OneMorRockgrove/OaxPosions.dds",
+			disableDepthBuffers = false, -- maybe
+			playerFacing = false,
+			size = {6752, 6604},
+		}
+		omr.customLines = omr.worldIcons:PlaceTexture(p)
+	end
+end
+
+function omr.createOaxBreadcrumbsLines()
+	local y = 35850 -- 35727 previously
+	local entranceLeft = omr.safeZones.entranceLeft
+	local exitLeft = omr.safeZones.exitLeft
+	local exitRight = omr.safeZones.exitRight
+
+	if Breadcrumbs then
+		-- potentially fixes a bug where lines dont load
+		Breadcrumbs.RefreshLines()
+	end
+
+	if omr.vars.breadcrumbsOaxLines and Breadcrumbs then
+		for i,v in ipairs(entranceLeft) do
+			if i < #entranceLeft-1 then
+				local w = entranceLeft[i+1]
+				Breadcrumbs.AddLineToPool(v[1], y, v[2], w[1], y, w[2], {0,0.62,0.58})
+			end
 		end
-
-		if omr.vars.breadcrumbsOaxLines then
+		for i,v in ipairs(exitLeft) do
+			if i < #exitLeft-1 then
+				local w = exitLeft[i+1]
+				Breadcrumbs.AddLineToPool(v[1], y, v[2], w[1], y, w[2], {0,1,0})
+			end
+		end
+		for i,v in ipairs(exitRight) do
 			if i < #exitRight-1 then
 				local w = exitRight[i+1]
 				Breadcrumbs.AddLineToPool(v[1], y, v[2], w[1], y, w[2], {0,0.5,0.86})
 			end
-		elseif omr.vars.customOaxLines then
-			local p = {
-				pos = {90108, y, 80146},
-				texture = "OneMorRockgrove/OaxPosions.dds",
-				disableDepthBuffers = false, -- maybe
-				playerFacing = false,
-				size = {6752, 6604},
-			}
-			omr.customLines = omr.worldIcons:PlaceTexture(p)
 		end
 	end
 end
 
+
 function omr.destroySafeBorders()
 	for i,v in pairs(omr.markersEntranceLeft) do
-		--OSI.DiscardPositionIcon(v)
 		omr.worldIcons:RemoveElement(v)
 	end
 	for i,v in pairs(omr.markersExitLeft) do
-		--OSI.DiscardPositionIcon(v)
 		omr.worldIcons:RemoveElement(v)
 	end
 
 	for i,v in pairs(omr.markersExitRight) do
-		--OSI.DiscardPositionIcon(v)
 		omr.worldIcons:RemoveElement(v)
 	end
 	omr.markersEntranceLeft = {}
@@ -243,7 +257,7 @@ end
 
 
 
-SLASH_COMMANDS['/showoaxborders'] = omr.createSafeBorders
+SLASH_COMMANDS['/showoaxborders'] = omr.EnableSafeZones
 SLASH_COMMANDS['/hideoaxborders'] = omr.destroySafeBorders
 --[[
 SLASH_COMMANDS['/enableoaxred'] = omr.EnableSafeIndicator

@@ -17,7 +17,7 @@ function omr.activateBahsei()
 	end
 
 
-	if omr.vars.bahseiPortalSegments then
+	if omr.vars.bahseiPortalSegments and Breadcrumbs then
 		EVENT_MANAGER:RegisterForEvent("OMR Portal Breadcrumbs", EVENT_COMBAT_EVENT, omr.hitByPortal)
 		EVENT_MANAGER:AddFilterForEvent("OMR Portal Breadcrumbs", EVENT_COMBAT_EVENT, REGISTER_FILTER_ABILITY_ID, 153423)
 		EVENT_MANAGER:AddFilterForEvent("OMR Portal Breadcrumbs", EVENT_COMBAT_EVENT, REGISTER_FILTER_TARGET_COMBAT_UNIT_TYPE, COMBAT_UNIT_TYPE_PLAYER)
@@ -287,7 +287,7 @@ function omr.createInitialGroundMarkers(corner)
 
 	end
 
-	if omr.vars.breadcrumbsBahseiInitialLine then
+	if omr.vars.breadcrumbsBahseiInitialLine and Breadcrumbs then
 		Breadcrumbs.RefreshLines()
 		Breadcrumbs.AddLineToPool(startX, startY+5, startZ, endX, startY+5, endZ, {1,0,1})
 	end
@@ -341,7 +341,7 @@ function omr.healedByBeam()
 
 	local world, px, py, pz = GetUnitRawWorldPosition('player')
 
-	if omr.vars.breadcrumbsBahseiPortalLine then
+	if omr.vars.breadcrumbsBahseiPortalLine and Breadcrumbs then
 		Breadcrumbs.RefreshLines()
 		Breadcrumbs.AddLineToPool(px, py, pz, avgx, py, avgz, {1,0,1})
 	end

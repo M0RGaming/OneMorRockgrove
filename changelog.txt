@@ -1,7 +1,12 @@
+Version 1.4.0
+----------
+Added Console Support
+Split the oax safe zone settings up, so now you can show lines without needing to have the markers displaying
+
 Version 1.3.0
 ----------
 Moved to LCA instead of Odys
-Added a prerendered Oax Poisons iamge
+Added a prerendered Oax Poisons image
 
 Version 1.2.1
 ----------
